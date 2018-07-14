@@ -1,8 +1,6 @@
 pragma solidity ^0.4.4;
 
-
 import "./../ownership/Ownable.sol";
-
 
 /*
  * Killable
