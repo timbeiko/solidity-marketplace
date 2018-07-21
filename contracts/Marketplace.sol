@@ -17,6 +17,12 @@ contract Marketplace is Ownable, Killable {
 	address[] requestedStoreOwners;
 	mapping (address => bool) public storeOwners;
 
+	event AdminAdded (address adminAddress);
+	event AdminRemoved (address removedAddress);
+	event StoreOwnerRequest (address requester);
+	event StoreOwnerAdded (address storeOwnerAddress);
+	event StoreOwnerRemoved (address storeOwnerAddress);
+
 	modifier onlyAdmin() {
 		if (administrators[msg.sender] == true)
 			_;
@@ -24,11 +30,13 @@ contract Marketplace is Ownable, Killable {
 
 	function addAdmin(address admin) onlyAdmin public {
 		administrators[admin] = true;
+		emit AdminAdded(admin);
 	}
 
 	function removeAdmin(address admin) onlyOwner public {
 		if (administrators[admin] == true)
 			administrators[admin] = false;
+			emit AdminRemoved(admin);
 	}
 
 	function checkAdmin(address admin) constant public returns (bool) {
@@ -38,6 +46,7 @@ contract Marketplace is Ownable, Killable {
 	function requestStoreOwnerStatus() public {
 		if (storeOwners[msg.sender] == false)
 			requestedStoreOwners.push(msg.sender);
+			emit StoreOwnerRequest(msg.sender);
 	}
 
 	function getRequestedStoreOwnersLength() constant public returns (uint) {
@@ -50,10 +59,12 @@ contract Marketplace is Ownable, Killable {
 
 	function approveStoreOwnerStatus(address requester) onlyAdmin public {
 		storeOwners[requester] = true; 
+		emit StoreOwnerAdded(requester);
 	}
 
 	function removeStoreOwnerStatus(address storeOwner) onlyAdmin public {
 		storeOwners[storeOwner] = false; 
+		emit StoreOwnerRemoved(storeOwner);
 	}
  
 	function checkStoreOwnerStatus(address storeOwner) constant public returns (bool) {

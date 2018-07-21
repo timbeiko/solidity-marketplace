@@ -39,8 +39,7 @@ contract Stores is Ownable, Killable {
 		bytes32 id, 
 		string name, 
 		address owner, 
-		uint totalStores 
-	);
+		uint totalStores);
 
 	mapping (address => Storefront[]) storefronts; 
 	mapping (bytes32 => Product []) inventories; 
