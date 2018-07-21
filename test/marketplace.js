@@ -62,11 +62,39 @@ contract('Marketplace', function(accounts) {
   	}).then(function() {
   		return marketplaceInstance.removeAdmin(owner, {from: account});
   	}).then(function() {
-  		return marketplaceInstance.removeAdmin(owner, {from: account})
+  		return marketplaceInstance.removeAdmin(owner, {from: account});
   	}).then(function() {
   		// owner should still be an admin 
   		assert(marketplaceInstance.checkAdmin(owner), true);
   	});
   });
 
+  it("Should allow anyone to request to be a store owner", function() {
+    return Marketplace.deployed().then(function(instance) {
+      marketplaceInstance = instance; 
+      requester = accounts[1]; 
+      marketplaceInstance.requestStoreOwnerStatus({from: requester});
+    }).then(function() {
+      assert(marketplaceInstance.getRequestedStoreOwnersLength(), 1);
+      assert(marketplaceInstance.getRequestedStoreOwner(0), requester);
+    });
+  });
+
+
+  it("Should allow admins to approve store owners", function() {
+    return Marketplace.deployed().then(function(instance) {
+      marketplaceInstance = instance; 
+      admin = accounts[0]; // made admin by deploying the contract 
+      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
+      assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), true);
+    });
+  });
+
+  it("Should *not* allow non-admins to approve store owners", function() {
+    return Marketplace.deployed().then(function(instance) {
+      marketplaceInstance = instance; 
+      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: accounts[2]}); 
+      assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), false);
+    })
+  })
 });

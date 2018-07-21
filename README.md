@@ -37,10 +37,3 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
-
-
-
-# TODOs
-- Implement instantiation of Marketplace Contract
-	- Need owner to set admins 
-	-  
