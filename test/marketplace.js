@@ -95,6 +95,43 @@ contract('Marketplace', function(accounts) {
       marketplaceInstance = instance; 
       marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: accounts[2]}); 
       assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), false);
-    })
-  })
+    });
+  });
+
+  it("Should allow admins to remove store owners", function() {
+    return Marketplace.deployed().then(function(instance) {
+      marketplaceInstance = instance;
+      admin = accounts[0]; // made admin by deploying the contract 
+      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
+      marketplaceInstance.removeStoreOwnerStatus(accounts[1], {from: admin});
+      assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), false);
+    });
+  });
+
+  it("Should *not* allow non-admins to remove store owners", function() {
+    return Marketplace.deployed().then(function(instance) {
+      marketplaceInstance = instance;
+      admin = accounts[0]; // made admin by deploying the contract 
+      nonAdmin = accounts[2];
+      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
+      marketplaceInstance.removeStoreOwnerStatus(accounts[1], {from: nonAdmin});
+      assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), true);
+    });
+  });
+
+  it("removeStoreOwnersFromRequestList should remove approved store owners from the list ", function() {
+    return Marketplace.deployed().then(function(instance) {
+      marketplaceInstance = instance; 
+      admin = accounts[0]; 
+      marketplaceInstance.requestStoreOwnerStatus({from: accounts[1]});
+    }).then(function() {
+      marketplaceInstance.requestStoreOwnerStatus({from: accounts[2]});
+    }).then(function() {
+      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
+    }).then(function() {
+      marketplaceInstance.removeStoreOwnersFromRequestList({from: admin, gas: 3000000});
+    }).then(function() {
+      assert(marketplaceInstance.getRequestedStoreOwnersLength(), 1);
+    });
+  });
 });

@@ -76,8 +76,24 @@ contract Marketplace is Ownable, Killable {
 		storeOwners[requester] = true; 
 	}
 
+	function removeStoreOwnerStatus(address storeOwner) onlyAdmin public {
+		storeOwners[storeOwner] = false; 
+	}
+ 
 	function checkStoreOwnerStatus(address storeOwner) constant public returns (bool) {
 		return storeOwners[storeOwner];
+	}
+
+	function removeStoreOwnersFromRequestList() onlyAdmin public {
+		address[] trimmedList; 
+
+		for(uint i=0; i<requestedStoreOwners.length; i++) {
+			if (storeOwners[requestedStoreOwners[i]])
+				delete requestedStoreOwners[i]; 
+			else 
+				trimmedList.push(requestedStoreOwners[i]);
+		}
+		requestedStoreOwners = trimmedList; 
 	}
 
 }
