@@ -9,8 +9,6 @@ import './zeppelin/lifecycle/Killable.sol';
 * This is the main contract for the Marketplace implementation.
 */
 contract Marketplace is Ownable, Killable {
-	enum StoreStatus {PendingAdminApproval, Live}
-
 	mapping (address => bool) public administrators; 
 	address[] requestedStoreOwners;
 	mapping (address => bool) public storeOwners;
