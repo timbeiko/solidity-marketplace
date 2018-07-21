@@ -32,7 +32,7 @@ contract Stores is Ownable, Killable {
 		string description; 
 		uint cost; 
 		uint qty; 
-		uint storeId; 
+		bytes32 storeId; 
 	}
 
 	event StoreCreated (
@@ -43,7 +43,7 @@ contract Stores is Ownable, Killable {
 	);
 
 	mapping (address => Storefront[]) storefronts; 
-	mapping (uint => Product []) inventories; 
+	mapping (bytes32 => Product []) inventories; 
 
 	modifier onlyStoreOwner() {
 		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
