@@ -127,11 +127,15 @@ contract('Marketplace', function(accounts) {
     }).then(function() {
       marketplaceInstance.requestStoreOwnerStatus({from: accounts[2]});
     }).then(function() {
-      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
+      marketplaceInstance.requestStoreOwnerStatus({from: accounts[3]});
     }).then(function() {
-      marketplaceInstance.removeStoreOwnersFromRequestList({from: admin, gas: 3000000});
+      marketplaceInstance.approveStoreOwnerStatus(accounts[2], {from: admin});
     }).then(function() {
-      assert(marketplaceInstance.getRequestedStoreOwnersLength(), 1);
+      marketplaceInstance.removeStoreOwnersFromRequestList({from: admin});
+    }).then(function() {
+      assert(marketplaceInstance.getRequestedStoreOwnersLength(), 2);
+      assert(marketplaceInstance.getRequestedStoreOwner(0), accounts[1]);
+      assert(marketplaceInstance.getRequestedStoreOwner(1), accounts[3]);
     });
   });
 });

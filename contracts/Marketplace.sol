@@ -11,26 +11,9 @@ import './zeppelin/lifecycle/Killable.sol';
 contract Marketplace is Ownable, Killable {
 	enum StoreStatus {PendingAdminApproval, Live}
 
-	struct Product {
-		string name;
-		string description;
-		uint price; 
-		uint quantity;
-	}
-
-	struct Store {
-		uint id; 
-		string name;
-		uint balance;
-		address owner; 
-		StoreStatus status;
-	}
-
 	mapping (address => bool) public administrators; 
 	address[] requestedStoreOwners;
 	mapping (address => bool) public storeOwners;
-	mapping (address => Store []) public stores;
-	mapping (uint => Product []) public inventories;
 
 	modifier onlyAdmin() {
 		if (administrators[msg.sender] == true)
@@ -85,15 +68,16 @@ contract Marketplace is Ownable, Killable {
 	}
 
 	function removeStoreOwnersFromRequestList() onlyAdmin public {
-		address[] trimmedList; 
-
-		for(uint i=0; i<requestedStoreOwners.length; i++) {
-			if (storeOwners[requestedStoreOwners[i]])
-				delete requestedStoreOwners[i]; 
-			else 
-				trimmedList.push(requestedStoreOwners[i]);
+		uint emptySpots = 0; 
+		uint requestLength = requestedStoreOwners.length;
+		for(uint i=0; i<requestLength; i++) {
+			if (checkStoreOwnerStatus(requestedStoreOwners[i]))
+				requestedStoreOwners[i] = requestedStoreOwners[requestLength-1-emptySpots];
+				emptySpots += 1; 
 		}
-		requestedStoreOwners = trimmedList; 
-	}
 
+		for(i=0; i<emptySpots; i++) {
+			delete requestedStoreOwners[requestLength-1-i];
+		}
+	}
 }
