@@ -22,11 +22,6 @@ contract Marketplace is Ownable, Killable {
 			_;
 	}
 
-	modifier onlyStoreOwner() {
-		if (storeOwners[msg.sender] == true)
-			_;
-	}
-
 	function addAdmin(address admin) onlyAdmin public {
 		administrators[admin] = true;
 	}
