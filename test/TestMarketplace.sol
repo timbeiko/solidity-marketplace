@@ -6,7 +6,6 @@ import "../contracts/Marketplace.sol";
 
 contract TestMarketplace {
 	address testAddress = 0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE;
-	event print_address(address);
 
 	function testOwnerIsMadeAdmin() public {
 		Marketplace marketplace = Marketplace(DeployedAddresses.Marketplace());

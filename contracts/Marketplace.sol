@@ -9,6 +9,10 @@ import './zeppelin/lifecycle/Killable.sol';
 * This is the main contract for the Marketplace implementation.
 */
 contract Marketplace is Ownable, Killable {
+	constructor() public {
+		administrators[msg.sender] = true;
+	}
+
 	mapping (address => bool) public administrators; 
 	address[] requestedStoreOwners;
 	mapping (address => bool) public storeOwners;
@@ -21,10 +25,6 @@ contract Marketplace is Ownable, Killable {
 	modifier onlyStoreOwner() {
 		if (storeOwners[msg.sender] == true)
 			_;
-	}
-
-	constructor() public {
-		administrators[msg.sender] = true;
 	}
 
 	function addAdmin(address admin) onlyAdmin public {
