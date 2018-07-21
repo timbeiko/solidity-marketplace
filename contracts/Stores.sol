@@ -13,9 +13,38 @@ import './Marketplace.sol';
 contract Stores is Ownable, Killable {
 	address public marketplaceId; 
 	Marketplace public marketplaceInstance; 
+
 	constructor(address marketplaceContract) public {
 		marketplaceInstance = Marketplace(marketplaceContract);
 		marketplaceId = marketplaceContract; 
+	}
+
+	struct Storefront {
+		uint id; 
+		string name;
+		address owner; 
+		uint balance; 
+	}
+
+	struct Product {
+		uint id; 
+		string name; 
+		string description; 
+		uint cost; 
+		uint qty; 
+		uint storeId; 
+	}
+
+	mapping (address => Storefront[]) storefronts; 
+	mapping (uint => Product []) inventories; 
+
+	modifier onlyStoreOwner() {
+		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
+			_;
+	}
+
+	function createStorefront(string name) onlyStoreOwner public {
+		
 	}
 
 }
