@@ -20,20 +20,27 @@ contract Stores is Ownable, Killable {
 	}
 
 	struct Storefront {
-		uint id; 
+		bytes32 id; 
 		string name;
 		address owner; 
 		uint balance; 
 	}
 
 	struct Product {
-		uint id; 
+		bytes32 id; 
 		string name; 
 		string description; 
 		uint cost; 
 		uint qty; 
 		uint storeId; 
 	}
+
+	event StoreCreated (
+		bytes32 id, 
+		string name, 
+		address owner, 
+		uint totalStores 
+	);
 
 	mapping (address => Storefront[]) storefronts; 
 	mapping (uint => Product []) inventories; 
@@ -43,8 +50,20 @@ contract Stores is Ownable, Killable {
 			_;
 	}
 
+	modifier onlyStorefrontOwner(Storefront s) {
+		if (s.owner == msg.sender)
+			_; 
+	}
+
 	function createStorefront(string name) onlyStoreOwner public {
-		
+		bytes32 id = keccak256(msg.sender, name, now);
+		Storefront memory s = Storefront(id, name, msg.sender, 0);
+		storefronts[msg.sender].push(s);
+		emit StoreCreated(id, name, msg.sender, getStorefrontCountByOwner(msg.sender));
+	}
+
+	function getStorefrontCountByOwner(address owner) constant public returns (uint) {
+		return storefronts[owner].length;
 	}
 
 }

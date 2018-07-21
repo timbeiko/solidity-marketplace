@@ -49,14 +49,14 @@
     "absolutePath": "/Users/tim/Code/solidity-marketplace/contracts/zeppelin/lifecycle/Killable.sol",
     "exportedSymbols": {
       "Killable": [
-        345
+        418
       ]
     },
-    "id": 346,
+    "id": 419,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 331,
+        "id": 404,
         "literals": [
           "solidity",
           "^",
@@ -69,10 +69,10 @@
       {
         "absolutePath": "/Users/tim/Code/solidity-marketplace/contracts/zeppelin/ownership/Ownable.sol",
         "file": "./../ownership/Ownable.sol",
-        "id": 332,
+        "id": 405,
         "nodeType": "ImportDirective",
-        "scope": 346,
-        "sourceUnit": 387,
+        "scope": 419,
+        "sourceUnit": 460,
         "src": "25:36:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -83,38 +83,38 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 333,
+              "id": 406,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 386,
+              "referencedDeclaration": 459,
               "src": "198:7:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$386",
+                "typeIdentifier": "t_contract$_Ownable_$459",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 334,
+            "id": 407,
             "nodeType": "InheritanceSpecifier",
             "src": "198:7:2"
           }
         ],
         "contractDependencies": [
-          386
+          459
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 345,
+        "id": 418,
         "linearizedBaseContracts": [
-          345,
-          386
+          418,
+          459
         ],
         "name": "Killable",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 343,
+              "id": 416,
               "nodeType": "Block",
               "src": "236:30:2",
               "statements": [
@@ -124,11 +124,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 340,
+                        "id": 413,
                         "name": "owner",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 349,
+                        "referencedDeclaration": 422,
                         "src": "255:5:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -143,18 +143,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 339,
+                      "id": 412,
                       "name": "selfdestruct",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 409,
+                      "referencedDeclaration": 482,
                       "src": "242:12:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_selfdestruct_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 341,
+                    "id": 414,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -168,28 +168,28 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 342,
+                  "id": 415,
                   "nodeType": "ExpressionStatement",
                   "src": "242:19:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 344,
+            "id": 417,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 337,
+                "id": 410,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 336,
+                  "id": 409,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 367,
+                  "referencedDeclaration": 440,
                   "src": "226:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -203,26 +203,26 @@
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 335,
+              "id": 408,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "223:2:2"
             },
             "payable": false,
             "returnParameters": {
-              "id": 338,
+              "id": 411,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "236:0:2"
             },
-            "scope": 345,
+            "scope": 418,
             "src": "210:56:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 346,
+        "scope": 419,
         "src": "177:91:2"
       }
     ],
@@ -232,14 +232,14 @@
     "absolutePath": "/Users/tim/Code/solidity-marketplace/contracts/zeppelin/lifecycle/Killable.sol",
     "exportedSymbols": {
       "Killable": [
-        345
+        418
       ]
     },
-    "id": 346,
+    "id": 419,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 331,
+        "id": 404,
         "literals": [
           "solidity",
           "^",
@@ -252,10 +252,10 @@
       {
         "absolutePath": "/Users/tim/Code/solidity-marketplace/contracts/zeppelin/ownership/Ownable.sol",
         "file": "./../ownership/Ownable.sol",
-        "id": 332,
+        "id": 405,
         "nodeType": "ImportDirective",
-        "scope": 346,
-        "sourceUnit": 387,
+        "scope": 419,
+        "sourceUnit": 460,
         "src": "25:36:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -266,38 +266,38 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 333,
+              "id": 406,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 386,
+              "referencedDeclaration": 459,
               "src": "198:7:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$386",
+                "typeIdentifier": "t_contract$_Ownable_$459",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 334,
+            "id": 407,
             "nodeType": "InheritanceSpecifier",
             "src": "198:7:2"
           }
         ],
         "contractDependencies": [
-          386
+          459
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 345,
+        "id": 418,
         "linearizedBaseContracts": [
-          345,
-          386
+          418,
+          459
         ],
         "name": "Killable",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 343,
+              "id": 416,
               "nodeType": "Block",
               "src": "236:30:2",
               "statements": [
@@ -307,11 +307,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 340,
+                        "id": 413,
                         "name": "owner",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 349,
+                        "referencedDeclaration": 422,
                         "src": "255:5:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -326,18 +326,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 339,
+                      "id": 412,
                       "name": "selfdestruct",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 409,
+                      "referencedDeclaration": 482,
                       "src": "242:12:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_selfdestruct_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 341,
+                    "id": 414,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -351,28 +351,28 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 342,
+                  "id": 415,
                   "nodeType": "ExpressionStatement",
                   "src": "242:19:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 344,
+            "id": 417,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 337,
+                "id": 410,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 336,
+                  "id": 409,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 367,
+                  "referencedDeclaration": 440,
                   "src": "226:9:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -386,26 +386,26 @@
             "name": "kill",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 335,
+              "id": 408,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "223:2:2"
             },
             "payable": false,
             "returnParameters": {
-              "id": 338,
+              "id": 411,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "236:0:2"
             },
-            "scope": 345,
+            "scope": 418,
             "src": "210:56:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 346,
+        "scope": 419,
         "src": "177:91:2"
       }
     ],
@@ -424,5 +424,5 @@
     }
   },
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-21T18:03:07.466Z"
+  "updatedAt": "2018-07-21T19:14:54.676Z"
 }
