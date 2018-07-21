@@ -41,8 +41,8 @@ contract Stores is Ownable, Killable {
 		address owner, 
 		uint totalStores);
 
-	mapping (address => Storefront[]) storefronts; 
-	mapping (bytes32 => Product []) inventories; 
+	mapping (address => Storefront[]) public storefronts; 
+	mapping (bytes32 => Product []) public inventories; 
 
 	modifier onlyStoreOwner() {
 		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
@@ -64,5 +64,7 @@ contract Stores is Ownable, Killable {
 	function getStorefrontCountByOwner(address owner) constant public returns (uint) {
 		return storefronts[owner].length;
 	}
+
+
 
 }
