@@ -30,12 +30,45 @@ contract('Stores', async (accounts) => {
 		assert.equal(storeCount, 3);
 	});
 
-	it("Should *not* allow non-store owners to create multiple storefronts", async() => {
+	it("Should *not* allow non-store owners to create a storefront", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
 		await stores.createStorefront("Test store 1", {from: accounts[2]});
 		let storeCount = await stores.getStorefrontCountByOwner(accounts[2]);
 		assert.equal(storeCount, 0);
+	});
+
+	it("Should allow storefront owners to remove a storefront", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		assert.equal(storeCount, 1);
+
+		let storeFrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		await stores.removeStorefront(storeFrontId, {from: storeOwner}); 
+		storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		assert.equal(storeCount, 0);
+	});
+
+	it("Should allow *not* allow non-storefront owners to remove an owner's storefront", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		assert.equal(storeCount, 1);
+
+		let notOwner = accounts[2];
+		let storeFrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		await stores.removeStorefront(storeFrontId, {from: notOwner}); 
+		storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		assert.equal(storeCount, 1);
 	});
 
 	it("Should allow a storefront owner to add a product to their storefront", async() => {
@@ -49,5 +82,43 @@ contract('Stores', async (accounts) => {
 		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
 		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
 		assert.equal(productCount, 1);
-	})
+	});
+
+	it("Should allow a storefront owner to add several products to their storefront", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		await stores.addProductToStorefront(storefrontId, "Test Product 1", "A test product", 100000, 100, {from: storeOwner});
+		await stores.addProductToStorefront(storefrontId, "Test Product 2", "A test product", 100000, 100, {from: storeOwner});
+		await stores.addProductToStorefront(storefrontId, "Test Product 3", "A test product", 100000, 100, {from: storeOwner});
+
+		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
+		assert.equal(productCount, 3);
+	});
+
+	it("Should allow a storefront owner to remove a product from their storefront", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		// Adding a product 
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
+		assert.equal(productCount, 1);
+
+
+		// Removing a product 
+		let productId = stores.getProductIdByStorefrontIdAndIndex(storefrontId, 0);
+		// Tried using HEX strings... not really working 
+		await stores.removeProductFromStorefront(web3.toHex(storefrontId), web3.toHex(productId), {from: storeOwner}); 
+		productCount = await stores.getProductCountByStorefrontId(storefrontId);
+		assert.equal(productCount, 0);
+	});
 });
