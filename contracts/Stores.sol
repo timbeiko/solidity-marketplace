@@ -64,7 +64,4 @@ contract Stores is Ownable, Killable {
 	function getStorefrontCountByOwner(address owner) constant public returns (uint) {
 		return storefronts[owner].length;
 	}
-
-
-
 }
