@@ -56,6 +56,11 @@ contract Stores is Ownable, Killable {
 		bytes32 productId, 
 		bytes32 storefrontId);
 
+	event PriceUpdated (
+		bytes32 productId,
+		uint oldPrice,
+		uint newPrice);
+
 	mapping (address => bytes32[]) public storefronts; 
 	mapping (bytes32 => Storefront) public storefrontById;
 	mapping (bytes32 => Product []) public inventories; 
@@ -124,19 +129,17 @@ contract Stores is Ownable, Killable {
 		return p.id; 
 	}
 
-	event PD(bytes32 id);
-	event inhere(string inhere);
-	event price(uint price);
 	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) onlyStorefrontOwner(storefrontId) public returns (uint) {
-		emit PD(productId);
-
 		Product [] inventory = inventories[storefrontId];
 		uint p = 0;
+		uint oldPrice = 0;
+
 		for (uint i=0; i<inventory.length; i++) {
-			emit PD(inventory[i].id);
 			if (inventory[i].id == productId) {
+				oldPrice = inventory[i].price;
 				inventory[i].price = newPrice;
 				p = inventory[i].price;
+				emit PriceUpdated(productId, oldPrice, newPrice);
 				break;
 			}
 		}
