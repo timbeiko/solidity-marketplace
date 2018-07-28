@@ -30,7 +30,7 @@ contract Stores is Ownable, Killable {
 		bytes32 id; 
 		string name; 
 		string description; 
-		uint cost; 
+		uint price; 
 		uint qty; 
 		bytes32 storefrontId; 
 	}
@@ -48,7 +48,7 @@ contract Stores is Ownable, Killable {
 		bytes32 id, 
 		string name, 
 		string description, 
-		uint cost, 
+		uint price, 
 		uint qty, 
 		bytes32 storefrontId);
 
@@ -115,13 +115,24 @@ contract Stores is Ownable, Killable {
 		return storefronts[owner][storefrontIndex];
 	}
 
-	function addProductToStorefront(bytes32 storefrontId, string name, string description, uint cost, uint qty) 
+	function addProductToStorefront(bytes32 storefrontId, string name, string description, uint price, uint qty) 
 	public onlyStorefrontOwner(storefrontId) returns (bytes32) {
 		bytes32 productId = keccak256(msg.sender, storefrontId, name, now); 
-		Product memory p = Product(productId, name, description, cost, qty, storefrontId); 
+		Product memory p = Product(productId, name, description, price, qty, storefrontId); 
 		inventories[storefrontId].push(p); 
-		emit ProductCreated(productId, name, description, cost, qty, storefrontId);
+		emit ProductCreated(productId, name, description, price, qty, storefrontId);
 		return p.id; 
+	}
+
+	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) onlyStorefrontOwner(storefrontId) public returns (uint) {
+		Product [] inventory = inventories[storefrontId];
+		for (uint i=0; i<inventory.length; i++) {
+			if (inventory[i].id == productId) {
+				inventory[i].price = newPrice;
+				return newPrice;
+			}
+		}
+		return 0;
 	}
 
 	function removeProductFromStorefront(bytes32 storefrontId, bytes32 productId) onlyStorefrontOwner(storefrontId) public {
@@ -132,11 +143,10 @@ contract Stores is Ownable, Killable {
 			if (inventory[i].id == productId) {
 				inventory[i] = inventory[productCount-1];
 				delete inventory[productCount-1];
+				emit ProductRemoved(productId, storefrontId);
 				break;
 			}
 		}
-
-		emit ProductRemoved(productId, storefrontId);
 	}
 
 	function getProductCountByStorefrontId(bytes32 id) constant public returns (uint) {

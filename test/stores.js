@@ -100,6 +100,24 @@ contract('Stores', async (accounts) => {
 		assert.equal(productCount, 3);
 	});
 
+	it("Should allow a storefront owner to update the price of a product from their storefront", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		// Adding a product 
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		let productId = await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
+
+		// Updating price 
+		let newPrice = await stores.updateProductPrice(storefrontId, productId, 1234); 
+		assert.equal(newPrice, 1234);
+	});
+
+
 	it("Should allow a storefront owner to remove a product from their storefront", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
@@ -109,15 +127,13 @@ contract('Stores', async (accounts) => {
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
 		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
-		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productId = await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
 		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
 		assert.equal(productCount, 1);
 
 
 		// Removing a product 
-		let productId = stores.getProductIdByStorefrontIdAndIndex(storefrontId, 0);
-		// Tried using HEX strings... not really working 
-		await stores.removeProductFromStorefront(web3.toHex(storefrontId), web3.toHex(productId), {from: storeOwner}); 
+		await stores.removeProductFromStorefront(storefrontId, productId, {from: storeOwner}); 
 		productCount = await stores.getProductCountByStorefrontId(storefrontId);
 		assert.equal(productCount, 0);
 	});
