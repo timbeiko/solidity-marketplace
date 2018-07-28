@@ -150,7 +150,12 @@ contract Stores is Ownable, Killable {
 	}
 
 	function getProductCountByStorefrontId(bytes32 id) constant public returns (uint) {
-		return inventories[id].length;
+		uint count = inventories[id].length;
+		for(uint i=0; i<count; i++) {
+			if (inventories[id][i].id == 0x0000000000000000000000000000000000000000000000000000000000000000)
+				count -= 1;
+		}
+		return count;
 	}
 
 	function getProductIdByStorefrontIdAndIndex(bytes32 storefrontId, uint productIndex) public returns (bytes32) {
