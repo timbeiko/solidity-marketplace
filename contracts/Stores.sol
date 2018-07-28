@@ -117,19 +117,38 @@ contract Stores is Ownable, Killable {
 
 	function addProductToStorefront(bytes32 storefrontId, string name, string description, uint price, uint qty) 
 	public onlyStorefrontOwner(storefrontId) returns (bytes32) {
-		bytes32 productId = keccak256(msg.sender, storefrontId, name, now); 
+		bytes32 productId = keccak256(msg.sender, storefrontId, name, description, price, qty); 
 		Product memory p = Product(productId, name, description, price, qty, storefrontId); 
 		inventories[storefrontId].push(p); 
 		emit ProductCreated(productId, name, description, price, qty, storefrontId);
 		return p.id; 
 	}
 
+	event PD(bytes32 id);
+	event inhere(string inhere);
+	event price(uint price);
 	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) onlyStorefrontOwner(storefrontId) public returns (uint) {
+		emit PD(productId);
+
+		Product [] inventory = inventories[storefrontId];
+		uint p = 0;
+		for (uint i=0; i<inventory.length; i++) {
+			emit PD(inventory[i].id);
+			if (inventory[i].id == productId) {
+				inventory[i].price = newPrice;
+				p = inventory[i].price;
+				break;
+			}
+		}
+
+		return p;
+	}
+
+	function getProductPrice(bytes32 storefrontId, bytes32 productId) constant public returns (uint) {
 		Product [] inventory = inventories[storefrontId];
 		for (uint i=0; i<inventory.length; i++) {
 			if (inventory[i].id == productId) {
-				inventory[i].price = newPrice;
-				return newPrice;
+				return inventory[i].price;
 			}
 		}
 		return 0;

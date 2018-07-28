@@ -104,56 +104,35 @@ contract('Stores', async (accounts) => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
 
-		// Adding a product 
+		// Creating storefront 
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
-		let productId = await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
+		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex.call(storeOwner, 0); 
+
+		// Add product 
+		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productId = await stores.addProductToStorefront.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productCount = await stores.getProductCountByStorefrontId.call(storefrontId);
+		assert.equal(productCount.toNumber(), 1);
 
 		// Updating price 
-		let newPrice = await stores.updateProductPrice(Number(storefrontId), Number(productId), 1234); 
-		assert.equal(newPrice, 1234);
+		await stores.updateProductPrice(storefrontId, productId, 1234, {from: storeOwner}); 
+		let newPrice = await stores.getProductPrice(storefrontId, productId); 
+		assert.equal(newPrice.toNumber(), 1234);
 	});
-
-	it("NEW: Should allow a storefront owner to update the price of a product from their storefront", async() => {
-		return Marketplace.deployed().then(function(instance) {
-			marketplace = instance;
-		}).then(function() {
-			return Stores.deployed().then(function(instance) {
-				stores = instance;
-			});
-		}).then(function() {
-			return storeOwner = accounts[1];
-		}).then(function() {
-			return marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
-		}).then(function() {
-			return stores.createStorefront("Test store", {from: storeOwner});
-		}).then(function() {
-			return storefrontId = stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
-		}).then(function() {
-			return productId = stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		}).then(function() {
-			return productCount = stores.getProductCountByStorefrontId(storefrontId);
-		}).then(function() {
-			return newPrice = stores.updateProductPrice(Number(storefrontId), Number(productId), 1234); 
-		}).then(function(newPrice) {
-			assert.equal(newPrice, 1234);
-		});
-	});
-
 
 	it("Should allow a storefront owner to remove a product from their storefront", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
 
-		// Adding a product 
+		// Creating storefront 
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
 		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex.call(storeOwner, 0); 
+
+		// Add a product, get ID and product count 
 		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
 		let productId = await stores.addProductToStorefront.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
 		await stores.getProductCountByStorefrontId(storefrontId);
