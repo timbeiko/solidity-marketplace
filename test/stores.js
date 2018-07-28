@@ -10,7 +10,7 @@ contract('Stores', async (accounts) => {
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
 
-		let storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		let storeCount = await stores.getStorefrontCount(storeOwner);
 
 		assert.equal(storeCount, 1);
 	});
@@ -25,7 +25,7 @@ contract('Stores', async (accounts) => {
 		await stores.createStorefront("Test store 2", {from: storeOwner});
 		await stores.createStorefront("Test store 3", {from: storeOwner});
 
-		let storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		let storeCount = await stores.getStorefrontCount(storeOwner);
 
 		assert.equal(storeCount, 3);
 	});
@@ -34,7 +34,7 @@ contract('Stores', async (accounts) => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
 		await stores.createStorefront("Test store 1", {from: accounts[2]});
-		let storeCount = await stores.getStorefrontCountByOwner(accounts[2]);
+		let storeCount = await stores.getStorefrontCount(accounts[2]);
 		assert.equal(storeCount, 0);
 	});
 
@@ -45,12 +45,12 @@ contract('Stores', async (accounts) => {
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		let storeCount = await stores.getStorefrontCount(storeOwner);
 		assert.equal(storeCount, 1);
 
-		let storeFrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		let storeFrontId = await stores.getStorefrontsId(storeOwner, 0); 
 		await stores.removeStorefront(storeFrontId, {from: storeOwner}); 
-		storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		storeCount = await stores.getStorefrontCount(storeOwner);
 		assert.equal(storeCount, 0);
 	});
 
@@ -61,13 +61,13 @@ contract('Stores', async (accounts) => {
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		let storeCount = await stores.getStorefrontCount(storeOwner);
 		assert.equal(storeCount, 1);
 
 		let notOwner = accounts[2];
-		let storeFrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
+		let storeFrontId = await stores.getStorefrontsId(storeOwner, 0); 
 		await stores.removeStorefront(storeFrontId, {from: notOwner}); 
-		storeCount = await stores.getStorefrontCountByOwner(storeOwner);
+		storeCount = await stores.getStorefrontCount(storeOwner);
 		assert.equal(storeCount, 1);
 	});
 
@@ -78,9 +78,9 @@ contract('Stores', async (accounts) => {
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
-		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
+		let storefrontId = await stores.getStorefrontsId(storeOwner, 0); 
+		await stores.addProduct(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productCount = await stores.getProductCount(storefrontId);
 		assert.equal(productCount, 1);
 	});
 
@@ -91,12 +91,12 @@ contract('Stores', async (accounts) => {
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex(storeOwner, 0); 
-		await stores.addProductToStorefront(storefrontId, "Test Product 1", "A test product", 100000, 100, {from: storeOwner});
-		await stores.addProductToStorefront(storefrontId, "Test Product 2", "A test product", 100000, 100, {from: storeOwner});
-		await stores.addProductToStorefront(storefrontId, "Test Product 3", "A test product", 100000, 100, {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsId(storeOwner, 0); 
+		await stores.addProduct(storefrontId, "Test Product 1", "A test product", 100000, 100, {from: storeOwner});
+		await stores.addProduct(storefrontId, "Test Product 2", "A test product", 100000, 100, {from: storeOwner});
+		await stores.addProduct(storefrontId, "Test Product 3", "A test product", 100000, 100, {from: storeOwner});
 
-		let productCount = await stores.getProductCountByStorefrontId(storefrontId);
+		let productCount = await stores.getProductCount(storefrontId);
 		assert.equal(productCount, 3);
 	});
 
@@ -108,12 +108,12 @@ contract('Stores', async (accounts) => {
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex.call(storeOwner, 0); 
+		let storefrontId = await stores.getStorefrontsId.call(storeOwner, 0); 
 
 		// Add product 
-		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		let productId = await stores.addProductToStorefront.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		let productCount = await stores.getProductCountByStorefrontId.call(storefrontId);
+		await stores.addProduct(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productId = await stores.addProduct.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productCount = await stores.getProductCount.call(storefrontId);
 		assert.equal(productCount.toNumber(), 1);
 
 		// Updating price 
@@ -130,19 +130,19 @@ contract('Stores', async (accounts) => {
 		let storeOwner = accounts[1];
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
-		let storefrontId = await stores.getStorefrontsIdByOwnerAndIndex.call(storeOwner, 0); 
+		let storefrontId = await stores.getStorefrontsId.call(storeOwner, 0); 
 
 		// Add a product, get ID and product count 
-		await stores.addProductToStorefront(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		let productId = await stores.addProductToStorefront.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
-		await stores.getProductCountByStorefrontId(storefrontId);
-		let productCount = await stores.getProductCountByStorefrontId.call(storefrontId);
+		await stores.addProduct(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productId = await stores.addProduct.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		await stores.getProductCount(storefrontId);
+		let productCount = await stores.getProductCount.call(storefrontId);
 		assert.equal(productCount.toNumber(), 1);
 
 		// Removing a product 
-		await stores.removeProductFromStorefront(storefrontId, productId, {from: storeOwner}); 
-		await stores.getProductCountByStorefrontId(storefrontId);
-		productCount = await stores.getProductCountByStorefrontId.call(storefrontId);
+		await stores.removeProduct(storefrontId, productId, {from: storeOwner}); 
+		await stores.getProductCount(storefrontId);
+		productCount = await stores.getProductCount.call(storefrontId);
 		assert.equal(productCount.toNumber(), 0);
 	});
 });
