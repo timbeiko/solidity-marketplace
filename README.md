@@ -41,4 +41,3 @@ Additional information about the project can be found [here](https://docs.google
 # TODOs
 - [ ] Update visibility for all functions 
 - [ ] Split contract and tests accross multiple files 
-- [ ] Add `.gitignore`
