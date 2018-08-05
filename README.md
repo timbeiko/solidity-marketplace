@@ -12,11 +12,11 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 	- [ ] Update reflected in UI
  
 ## Test Requirements:
-- [ ] Write 5 tests for each contract you wrote
-	- [ ] Solidity 
-	- [ ] JavaScript
+- [x] Write 5 tests for each contract you wrote
+	- [x] Solidity 
+	- [x] JavaScript
 - [ ] Explain why you wrote those tests
-- [ ] Tests run with truffle test
+- [x] Tests run with truffle test
  
 ## Design Pattern Requirements:
 - [ ] Implement emergency stop
