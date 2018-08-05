@@ -61,6 +61,12 @@ contract Stores is Ownable, Killable {
 		uint oldPrice,
 		uint newPrice);
 
+	event ProductSold (
+		bytes32 productId,
+		bytes32 storefrontId,
+		uint price,
+		address buyer);
+
 	mapping (address => bytes32[]) public storefronts; 
 	mapping (bytes32 => Storefront) public storefrontById;
 	mapping (bytes32 => bytes32[]) public inventories; 
@@ -192,5 +198,37 @@ contract Stores is Ownable, Killable {
 	public 
 	returns (bytes32) {
 		return bytes32(inventories[storefrontId][productIndex]); 
+	}
+
+	function purchaseProduct(bytes32 storefrontId, bytes32 productId) payable returns (bool) {
+		// Fetch product from inventory
+		Product [] inventory = inventories[storefrontId]; 
+		uint productCount = inventory.length; 
+		Product product;
+		uint index;
+
+		for(uint i=0; i<productCount; i++) {
+			if (inventory[i].id == productId) {
+				product = inventory[i];
+				index = i;
+			} else if (i == (productCount-1)) {
+				return false;
+			}
+		}
+
+		// Check if amount sent is large enough. If too large, refund the difference
+		require(msg.value >= product.price);
+		uint refund = 0; 
+		if (msg.value > product.price) {
+			refund = msg.value - product.price;
+			msg.sender.transfer(refund);
+		}
+
+
+		// Update product and storefront attributes
+		product.qty -= 1;
+		storefrontById[storefrontId].balance += product.price;
+		emit ProductSold(productId, storefrontId, product.price, msg.sender);
+		return true;
 	}
 }
