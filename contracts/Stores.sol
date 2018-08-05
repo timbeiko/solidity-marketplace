@@ -70,7 +70,6 @@ contract Stores is Ownable, Killable {
 	mapping (address => bytes32[]) public storefronts; 
 	mapping (bytes32 => Storefront) public storefrontById;
 	mapping (bytes32 => Product []) public inventories; 
-	mapping (bytes32 => Product) public productById;
 
 	modifier onlyStoreOwner() {
 		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
