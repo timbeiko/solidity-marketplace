@@ -65,7 +65,8 @@ contract Stores is Ownable, Killable {
 		bytes32 productId,
 		bytes32 storefrontId,
 		uint price,
-		address buyer);
+		address buyer,
+		uint newQuantity);
 
 	mapping (address => bytes32[]) public storefronts; 
 	mapping (bytes32 => Storefront) public storefrontById;
@@ -80,6 +81,13 @@ contract Stores is Ownable, Killable {
 	modifier onlyStorefrontOwner(bytes32 id) {
 		if (storefrontById[id].owner == msg.sender)
 			_; 
+	}
+
+	function getBalance() 
+	constant
+	public 
+	returns (uint) {
+		return address(this).balance;
 	}
 
 	function createStorefront(string name) 
@@ -135,6 +143,13 @@ contract Stores is Ownable, Killable {
 	public 
 	returns (bytes32) {
 		return storefronts[owner][storefrontIndex];
+	}
+
+	function getStorefrontBalance(bytes32 storefrontId) 
+	constant 
+	public 
+	returns (uint) {
+		return storefrontById[storefrontId].balance;
 	}
 
 	function addProduct(bytes32 storefrontId, string name, string description, uint price, uint qty) 
@@ -202,19 +217,7 @@ contract Stores is Ownable, Killable {
 
 	function purchaseProduct(bytes32 storefrontId, bytes32 productId) payable returns (bool) {
 		// Fetch product from inventory
-		Product [] inventory = inventories[storefrontId]; 
-		uint productCount = inventory.length; 
-		Product product;
-		uint index;
-
-		for(uint i=0; i<productCount; i++) {
-			if (inventory[i].id == productId) {
-				product = inventory[i];
-				index = i;
-			} else if (i == (productCount-1)) {
-				return false;
-			}
-		}
+		Product product = productById[productId];
 
 		// Check if amount sent is large enough. If too large, refund the difference
 		require(msg.value >= product.price);
@@ -224,11 +227,10 @@ contract Stores is Ownable, Killable {
 			msg.sender.transfer(refund);
 		}
 
-
 		// Update product and storefront attributes
 		product.qty -= 1;
 		storefrontById[storefrontId].balance += product.price;
-		emit ProductSold(productId, storefrontId, product.price, msg.sender);
+		emit ProductSold(productId, storefrontId, product.price, msg.sender, product.qty);
 		return true;
 	}
 }
