@@ -164,7 +164,7 @@ contract('Stores', async (accounts) => {
 		await stores.getProductCount(storefrontId);
 
 		// Purchase the product 
-		await stores.purchaseProduct(storefrontId, productId,{from: buyer, value: productPrice});
+		await stores.purchaseProduct(storefrontId, productId, 1, {from: buyer, value: productPrice});
 		let balance = await stores.getStorefrontBalance(storefrontId);
 		assert.equal(balance, productPrice);
 
@@ -172,7 +172,33 @@ contract('Stores', async (accounts) => {
 		assert.equal(contractBalance, productPrice);
 	});
 
-	it("Should refund someone if they pay more than the price", async() => {
+	it("Should allow someone to purchase multiple products if they pay >= the total", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+		let productPrice = 100000;
+		let buyer = accounts[5];
+
+		// Creating storefront 
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsId.call(storeOwner, 0); 
+
+		// Add a product, get ID
+		await stores.addProduct(storefrontId, "Test Product", "A test product", productPrice, 100, {from: storeOwner});
+		let productId = await stores.addProduct.call(storefrontId, "Test Product", "A test product", productPrice, 100, {from: storeOwner});
+		await stores.getProductCount(storefrontId);
+
+		// Purchase the product 
+		await stores.purchaseProduct(storefrontId, productId, 2, {from: buyer, value: 2*productPrice});
+		let balance = await stores.getStorefrontBalance(storefrontId);
+		assert.equal(balance, 2*productPrice);
+
+		let contractBalance = await stores.getBalance();
+		assert.equal(contractBalance, 2*productPrice);
+	});
+
+	it("Should refund someone if they pay more than the total", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
 		let productPrice = web3.toWei(5, 'ether');
@@ -191,7 +217,7 @@ contract('Stores', async (accounts) => {
 
 		// Purchase the product for 2x the price and get transaction gas costs information
 		let originalBuyerBalance = web3.eth.getBalance(buyer);;
-		let receipt = await stores.purchaseProduct(storefrontId, productId,{from: buyer, value: 2*productPrice, gas: 210000});
+		let receipt = await stores.purchaseProduct(storefrontId, productId, 1, {from: buyer, value: 2*productPrice, gas: 210000});
 		let gasUsed = receipt.receipt.gasUsed;
 		let tx = await web3.eth.getTransaction(receipt.tx);
 		let gasPrice = tx.gasPrice;
