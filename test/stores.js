@@ -118,7 +118,7 @@ contract('Stores', async (accounts) => {
 
 		// Updating price 
 		await stores.updateProductPrice(storefrontId, productId, 1234, {from: storeOwner}); 
-		let newPrice = await stores.getProductPrice(storefrontId, productId); 
+		let newPrice = await stores.getProductPrice(productId); 
 		assert.equal(newPrice.toNumber(), 1234);
 	});
 

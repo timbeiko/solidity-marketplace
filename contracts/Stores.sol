@@ -63,7 +63,8 @@ contract Stores is Ownable, Killable {
 
 	mapping (address => bytes32[]) public storefronts; 
 	mapping (bytes32 => Storefront) public storefrontById;
-	mapping (bytes32 => Product []) public inventories; 
+	mapping (bytes32 => bytes32[]) public inventories; 
+	mapping (bytes32 => Product) public productById;
 
 	modifier onlyStoreOwner() {
 		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
@@ -75,8 +76,11 @@ contract Stores is Ownable, Killable {
 			_; 
 	}
 
-	function createStorefront(string name) onlyStoreOwner public returns (bytes32) {
-		bytes32 id = keccak256(msg.sender, name, now);
+	function createStorefront(string name) 
+	onlyStoreOwner 
+	public 
+	returns (bytes32) {
+		bytes32 id = keccak256(abi.encodePacked(msg.sender, name, now));
 		Storefront memory s = Storefront(id, name, msg.sender, 0);
 		storefronts[msg.sender].push(s.id);
 		storefrontById[id] = s;
@@ -84,12 +88,15 @@ contract Stores is Ownable, Killable {
 		return s.id; 
 	}
 
-	function removeStorefront(bytes32 id) onlyStorefrontOwner(id) public {
+	function removeStorefront(bytes32 id) 
+	onlyStorefrontOwner(id) 
+	public {
 		Storefront memory sf = storefrontById[id]; 
-		Product [] storage inventory = inventories[id]; 
+		bytes32 [] storage inventory = inventories[id]; 
 
 		// Delete all products from storefront 
 		for (uint i=0; i<inventory.length; i++) {
+			delete productById[inventory[i]];
 			delete inventory[i];
 		}
 		// Remove from storefronts mapping
@@ -106,7 +113,10 @@ contract Stores is Ownable, Killable {
 		emit StorefrontRemoved(id);
 	}
 
-	function getStorefrontCount(address owner) constant public returns (uint) {
+	function getStorefrontCount(address owner) 
+	constant 
+	public 
+	returns (uint) {
 		uint initialCount = storefronts[owner].length;
 		for(uint i=0; i<storefronts[owner].length; i++)
 			if (storefronts[owner][i] == 0x0000000000000000000000000000000000000000000000000000000000000000)
@@ -114,70 +124,73 @@ contract Stores is Ownable, Killable {
 		return initialCount;
 	}
 
-	function getStorefrontsId(address owner, uint storefrontIndex) constant public returns (bytes32) {
+	function getStorefrontsId(address owner, uint storefrontIndex) 
+	constant 
+	public 
+	returns (bytes32) {
 		return storefronts[owner][storefrontIndex];
 	}
 
 	function addProduct(bytes32 storefrontId, string name, string description, uint price, uint qty) 
-	public onlyStorefrontOwner(storefrontId) returns (bytes32) {
-		bytes32 productId = keccak256(msg.sender, storefrontId, name, description, price, qty); 
+	public 
+	onlyStorefrontOwner(storefrontId) 
+	returns (bytes32) {
+		bytes32 productId = keccak256(abi.encodePacked(msg.sender, storefrontId, name, description, price, qty)); 
 		Product memory p = Product(productId, name, description, price, qty, storefrontId); 
-		inventories[storefrontId].push(p); 
+		inventories[storefrontId].push(productId); 
+		productById[productId] = p;
 		emit ProductCreated(productId, name, description, price, qty, storefrontId);
 		return p.id; 
 	}
 
-	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) onlyStorefrontOwner(storefrontId) public returns (uint) {
-		Product [] inventory = inventories[storefrontId];
-		uint p = 0;
-		uint oldPrice = 0;
-
-		for (uint i=0; i<inventory.length; i++) {
-			if (inventory[i].id == productId) {
-				oldPrice = inventory[i].price;
-				inventory[i].price = newPrice;
-				p = inventory[i].price;
-				emit PriceUpdated(productId, oldPrice, newPrice);
-				break;
-			}
-		}
-		return p;
+	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) 
+	onlyStorefrontOwner(storefrontId) 
+	public {
+		Product product = productById[productId];
+		uint oldPrice = product.price;
+		productById[productId].price = newPrice;
+		emit PriceUpdated(productId, oldPrice, newPrice);
 	}
 
-	function getProductPrice(bytes32 storefrontId, bytes32 productId) constant public returns (uint) {
-		Product [] inventory = inventories[storefrontId];
-		for (uint i=0; i<inventory.length; i++) {
-			if (inventory[i].id == productId) {
-				return inventory[i].price;
-			}
-		}
-		return 0;
+	function getProductPrice(bytes32 productId) 
+	constant 
+	public 
+	returns (uint) {
+		return productById[productId].price;
 	}
 
-	function removeProduct(bytes32 storefrontId, bytes32 productId) onlyStorefrontOwner(storefrontId) public {
-		Product [] inventory = inventories[storefrontId]; 
+	function removeProduct(bytes32 storefrontId, bytes32 productId) 
+	onlyStorefrontOwner(storefrontId) 
+	public {
+		bytes32[] inventory = inventories[storefrontId]; 
 		uint productCount = inventory.length; 
 
 		for(uint i=0; i<productCount; i++) {
-			if (inventory[i].id == productId) {
+			if (inventory[i] == productId) {
 				inventory[i] = inventory[productCount-1];
 				delete inventory[productCount-1];
+				delete productById[productId];
 				emit ProductRemoved(productId, storefrontId);
 				break;
 			}
 		}
 	}
 
-	function getProductCount(bytes32 storefrontId) constant public returns (uint) {
+	function getProductCount(bytes32 storefrontId) 
+	constant 
+	public 
+	returns (uint) {
 		uint count = inventories[storefrontId].length;
 		for(uint i=0; i<count; i++) {
-			if (inventories[storefrontId][i].id == 0x0000000000000000000000000000000000000000000000000000000000000000)
+			if (inventories[storefrontId][i] == 0x0000000000000000000000000000000000000000000000000000000000000000)
 				count -= 1;
 		}
 		return count;
 	}
 
-	function getProductId(bytes32 storefrontId, uint productIndex) public returns (bytes32) {
-		return bytes32(inventories[storefrontId][productIndex].id); 
+	function getProductId(bytes32 storefrontId, uint productIndex) 
+	public 
+	returns (bytes32) {
+		return bytes32(inventories[storefrontId][productIndex]); 
 	}
 }
