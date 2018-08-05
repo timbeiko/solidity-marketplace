@@ -4,7 +4,6 @@ import "./zeppelin/ownership/Ownable.sol";
 import './zeppelin/lifecycle/Killable.sol';
 import './Marketplace.sol';
 
-
 /*
 * Store 
 *
@@ -43,6 +42,10 @@ contract Stores is Ownable, Killable {
 
 	event StorefrontRemoved (
 		bytes32 id);
+
+	event BalanceWithdrawn (
+		bytes32 storefrontId,
+		uint256 amount);
 
 	event ProductCreated (
 		bytes32 id, 
@@ -124,9 +127,20 @@ contract Stores is Ownable, Killable {
 				break;
 			}
 		}
-		// Remove from storeFrontsById 
+		// Remove from storefrontById 
 		delete storefrontById[id];
 		emit StorefrontRemoved(id);
+	}
+
+	function withdrawStorefrontBalance(bytes32 storefrontId) 
+	onlyStorefrontOwner(storefrontId)
+	public {
+		uint storefrontBalance = storefrontById[storefrontId].balance;
+		if (storefrontBalance > 0) {
+			msg.sender.transfer(storefrontBalance);
+			emit BalanceWithdrawn(storefrontId, storefrontBalance);
+			storefrontById[storefrontId].balance = 0;
+		}
 	}
 
 	function getStorefrontCount(address owner) 
@@ -217,8 +231,9 @@ contract Stores is Ownable, Killable {
 		return bytes32(inventories[storefrontId][productIndex]); 
 	}
 
-
-	function purchaseProduct(bytes32 storefrontId, bytes32 productId, uint qty) payable returns (bool) {
+	function purchaseProduct(bytes32 storefrontId, bytes32 productId, uint qty) 
+	payable 
+	returns (bool) {
 		// Fetch product from inventory and perform checks 
 		Product product = productById[productId];
 		uint total =  product.price*qty;
