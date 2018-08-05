@@ -145,5 +145,24 @@ contract('Stores', async (accounts) => {
 		productCount = await stores.getProductCount.call(storefrontId);
 		assert.equal(productCount.toNumber(), 0);
 	});
+
+	it("Should allow someone to purchase a product if they pay more than its price", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		// Creating storefront 
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsId.call(storeOwner, 0); 
+
+		// Add a product, get ID
+		await stores.addProduct(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		let productId = await stores.addProduct.call(storefrontId, "Test Product", "A test product", 100000, 100, {from: storeOwner});
+		await stores.getProductCount(storefrontId);
+
+		// Purchase the product 
+		
+	})
 });
 
