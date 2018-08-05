@@ -29,6 +29,8 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 
 ## Other
 - [ ] Use a library (via EthPM)
+
+## Stretch Requirement
 - [ ] Integrate with an additional service, for example:
 	- [ ] IPFS
 	- [ ] uPort
@@ -40,5 +42,3 @@ Additional information about the project can be found [here](https://docs.google
 
 # TODOs
 - [ ] Update visibility for all functions 
-- [ ] Split contract and tests accross multiple files 
-- [ ] Implement the ability for users to buy items in a store 
