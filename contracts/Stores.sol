@@ -96,7 +96,6 @@ contract Stores is Ownable, Killable {
 
 		// Delete all products from storefront 
 		for (uint i=0; i<inventory.length; i++) {
-			delete productById[inventory[i].id];
 			delete inventory[i];
 		}
 		// Remove from storefronts mapping
@@ -130,7 +129,6 @@ contract Stores is Ownable, Killable {
 		bytes32 productId = keccak256(msg.sender, storefrontId, name, description, price, qty); 
 		Product memory p = Product(productId, name, description, price, qty, storefrontId); 
 		inventories[storefrontId].push(p); 
-		productById[productId] = p;
 		emit ProductCreated(productId, name, description, price, qty, storefrontId);
 		return p.id; 
 	}
