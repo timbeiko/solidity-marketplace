@@ -3,7 +3,15 @@ import { AccountData, ContractData, ContractForm } from 'drizzle-react-component
 import logo from '../../logo.png'
 
 class Home extends Component {
+
+  constructor(props, context) {
+    super(props);
+
+  }
   render() {
+
+    let requesterCount = <ContractData contract="Marketplace" method="getRequestedStoreOwnersLength" methodArgs={[{from: this.props.accounts[0]}]} />
+
     return (
       <main className="container">
         <div className="pure-g">
@@ -18,7 +26,16 @@ class Home extends Component {
           <div className="pure-u-1-1">
             <h2>Active Account</h2>
             <AccountData accountIndex="0" units="ether" precision="3" />
+            <br/><br/>
+          </div>
 
+          <div className="pure-u-1-1">
+            <h2>Marketplace</h2>
+            <p>Testing contract calls to Markeplace Contract</p>
+            <p><strong>Marketplace Admin?</strong>: TBD </p>
+            <p><strong>Number of Requests</strong>: {requesterCount} </p>
+            <p><strong>Requested Admins</strong>: TBD </p>
+            <p><strong>Request Admin: </strong><ContractForm contract="Marketplace" method="requestStoreOwnerStatus"/></p>
             <br/><br/>
           </div>
 
