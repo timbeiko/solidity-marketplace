@@ -14,42 +14,41 @@ class Home extends Component {
 
   render() {
     let requesterCount = <ContractData contract="Marketplace" method="getRequestedStoreOwnersLength" methodArgs={[{from: this.props.accounts[0]}]} />
-    let requesters = []
+    const requesters = []
     let Marketplace = this.context.drizzle.contracts.Marketplace
     let testRequesterCount = Marketplace.methods.getRequestedStoreOwnersLength().call(function (error, result) {
       for(let i=0; i<result; i++) {
         Marketplace.methods.getRequestedStoreOwner(i).call(function (error, res) {
-          requesters.push(res)
+          requesters.push({id: i, val:res})
         })
       }
     })
     console.log(requesters)
 
+    function ListItem(props) {
+      // Correct! There is no need to specify the key here:
+      return <li>{props}</li>;
+    }
 
-    // function ListItem(props) {
-    //   // Correct! There is no need to specify the key here:
-    //   return <li>{props.value}</li>;
-    // }
+    function NumberList(props) {
+      const numbers = props.numbers;
+      const listItems = numbers.map((number) =>
+        // Correct! Key should be specified inside the array.
+        <ListItem key={number.toString()}
+                  value={number} />
+      );
 
-    // function NumberList(props) {
-    //   const numbers = props.numbers;
-    //   const listItems = numbers.map((number) =>
-    //     // Correct! Key should be specified inside the array.
-    //     <ListItem key={number.toString()}
-    //               value={number} />
-    //   );
-
-    //   return (
-    //     <ul>
-    //       {listItems}
-    //     </ul>
-    //   );
-    // }
-
-    // let reqMap = NumberList(requesters)
-
-    // console.log(reqMap)
-
+      return (
+        <ul>
+          {listItems}
+        </ul>
+      );
+    }
+    function reqList() {
+      const reqList = {requesters.map((req) => <li key={req.id}> {req.val} </li>)}
+      return reqList
+    }
+    
     return (
       <main className="container">
         <div className="pure-g">
@@ -73,7 +72,8 @@ class Home extends Component {
             <p><strong>Marketplace Admin?</strong>: TBD </p>
             <p><strong>Number of Requests</strong>: {requesterCount} </p>
             <p><strong>Requested Admins</strong>: </p>
-            {requesters}
+            <reqList/>
+
             <p><strong>Request Admin: </strong><ContractForm contract="Marketplace" method="requestStoreOwnerStatus"/></p>
             <br/><br/>
           </div>
