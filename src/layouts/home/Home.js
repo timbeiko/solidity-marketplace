@@ -1,16 +1,54 @@
 import React, { Component } from 'react'
 import { AccountData, ContractData, ContractForm } from 'drizzle-react-components'
 import logo from '../../logo.png'
+import PropTypes from 'prop-types'
 
 class Home extends Component {
 
   constructor(props, context) {
     super(props);
+    this.context = context;
 
   }
-  render() {
 
+
+  render() {
     let requesterCount = <ContractData contract="Marketplace" method="getRequestedStoreOwnersLength" methodArgs={[{from: this.props.accounts[0]}]} />
+    let requesters = []
+    let Marketplace = this.context.drizzle.contracts.Marketplace
+    let testRequesterCount = Marketplace.methods.getRequestedStoreOwnersLength().call(function (error, result) {
+      for(let i=0; i<result; i++) {
+        Marketplace.methods.getRequestedStoreOwner(i).call(function (error, res) {
+          requesters.push(res)
+        })
+      }
+    })
+    console.log(requesters)
+
+
+    // function ListItem(props) {
+    //   // Correct! There is no need to specify the key here:
+    //   return <li>{props.value}</li>;
+    // }
+
+    // function NumberList(props) {
+    //   const numbers = props.numbers;
+    //   const listItems = numbers.map((number) =>
+    //     // Correct! Key should be specified inside the array.
+    //     <ListItem key={number.toString()}
+    //               value={number} />
+    //   );
+
+    //   return (
+    //     <ul>
+    //       {listItems}
+    //     </ul>
+    //   );
+    // }
+
+    // let reqMap = NumberList(requesters)
+
+    // console.log(reqMap)
 
     return (
       <main className="container">
@@ -34,7 +72,8 @@ class Home extends Component {
             <p>Testing contract calls to Markeplace Contract</p>
             <p><strong>Marketplace Admin?</strong>: TBD </p>
             <p><strong>Number of Requests</strong>: {requesterCount} </p>
-            <p><strong>Requested Admins</strong>: TBD </p>
+            <p><strong>Requested Admins</strong>: </p>
+            {requesters}
             <p><strong>Request Admin: </strong><ContractForm contract="Marketplace" method="requestStoreOwnerStatus"/></p>
             <br/><br/>
           </div>
@@ -72,6 +111,10 @@ class Home extends Component {
       </main>
     )
   }
+}
+
+Home.contextTypes = {
+  drizzle: PropTypes.object
 }
 
 export default Home
