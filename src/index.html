@@ -31,17 +31,27 @@
       <div id="adminView" style="display: none;">
         <div class="container">
           <div id="marketplace">
-            <p>You are an admin</p>
-          </div>
-        </div>
 
-        <div id="requesterTemplate" style="display: none;">
-          <p>
-            Request for: <span class="requesterAddress"> 0x0 </span>
-            <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
-          </p>
+            <div id="requesterTemplate" style="display: none;">
+              <h2>Requested Store Owners</h2>
+              <p>
+                <span class="requesterAddress"> 0x0 </span>
+                <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
+              </p>
+            </div>
+
+            <div>
+              <h2>Remove a Store Owner</h2>
+              <p>
+                <form id="removeStoreOwner">
+                  <input id="removeAddr" type="text">
+                  <input class="btn btn-default btn-remove-owner" type="submit" value="Remove">
+                </form>
+              </p>
+            </div>
         </div>
-      </div>
+        </div>
+      </div> <!-- end of adminView --> 
 
       <div id="storeOwnerView" style="display: none;">
         <p>You are a store owner</p>

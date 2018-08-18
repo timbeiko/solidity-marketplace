@@ -81,7 +81,6 @@ App = {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
 
       App.contracts.Marketplace.deployed().then(function(instance) {
@@ -143,7 +142,6 @@ App = {
     $('#adminView').attr('style', '');
     $('#storeOwnerView').attr('style', 'display: none;');
     $('#defaultView').attr('style', 'display: none;');
-
     return App.requesterListView();
   },
 
@@ -172,6 +170,28 @@ App = {
           $(document).on('click', '.btn-approve-requester', App.approveRequester);
         }
       })
+    });
+
+    return App.removeStoreOwnerStatus();
+  },
+
+  removeStoreOwnerStatus: function() {
+    var addr;
+    var MarketplaceInstance;
+
+    $('#removeStoreOwner').submit(function( event ) {
+      addr = $( "input:first" ).val();
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Marketplace.deployed().then(function(instance) {
+          MarketplaceInstance = instance;
+          return MarketplaceInstance.removeStoreOwnerStatus(addr, {from: account});
+        });
+      });
+      event.preventDefault();
     });
   },
 
