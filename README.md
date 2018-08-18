@@ -4,12 +4,12 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 
 # Requirements
 ## User Interface Requirements:
-- [ ] Run the app on a dev server locally for testing/grading
-- [ ] You should be able to visit a URL and interact with the application
-- [ ] App recognizes current account
-- [ ] Sign transactions using MetaMask
-- [ ] Contract state is updated
-	- [ ] Update reflected in UI
+- [x] Run the app on a dev server locally for testing/grading
+- [x] You should be able to visit a URL and interact with the application
+- [x] App recognizes current account
+- [x] Sign transactions using MetaMask
+- [x] Contract state is updated
+	- [x] Update reflected in UI
  
 ## Test Requirements:
 - [x] Write 5 tests for each contract you wrote
