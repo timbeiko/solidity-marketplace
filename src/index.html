@@ -81,7 +81,7 @@
 
       <div id="storeOwnerView" style="display: none;">
         <div>
-           <div>
+            <div>
               <h2>Create a storefront</h2>
               <p>Enter the storefront name below</p>
               <p>
@@ -92,19 +92,29 @@
               </p>
             </div>
 
-          <div>
-            <h2>Your Storefronts</h2>
-
-            <div id="storefronts">
-              
+            <div>
+              <h2>Your Storefronts</h2>
+              <div id="storefronts">
+                <!-- rendered storefronts -->
+              </div>
+              <div id="storefrontTemplate" style="display: none;">
+                <p>
+                  Storefront ID: <span id="storefrontId"> 0x0 </span>
+                </p>
+              </div>
             </div>
 
-            <div id="storefrontTemplate" style="display: none;">
+            <div>
+              <h2>Delete a storefront</h2>
+              <p>Enter the storefront ID below</p>
               <p>
-                Storefront ID: <span id="storefrontId"> 0x0 </span>
+                <form id="deleteStorefront">
+                  <input id="storefrontId" type="text">
+                  <input class="btn btn-default btn-delete-storefront" type="submit" value="Delete">
+                </form>
               </p>
             </div>
-          </div>
+
         </div>
       </div> <!-- end of storeOwnerView -->
 

@@ -128,6 +128,7 @@ App = {
     $('#adminView').attr('style', 'display: none;');
     $('#defaultView').attr('style', 'display: none;');
     App.createStorefront();
+    App.deleteStorefront();
     App.storefrontListView();
   },
 
@@ -326,6 +327,26 @@ App = {
         App.contracts.Stores.deployed().then(function(instance) {
           StoresInstance = instance;
           return StoresInstance.createStorefront(name, {from: account});
+        });
+      });
+      event.preventDefault();
+    });
+  },
+
+  deleteStorefront: function() {
+    let id;
+    var StoresInstance;
+
+    $('#deleteStorefront').submit(function( event ) {
+      id = $("input#storefrontId").val();
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Stores.deployed().then(function(instance) {
+          StoresInstance = instance;
+          return StoresInstance.removeStorefront(id, {from: account});
         });
       });
       event.preventDefault();
