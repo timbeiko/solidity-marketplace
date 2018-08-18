@@ -97,10 +97,14 @@ App = {
         if (isOwner) {
           return App.storeOwnerView();
         } else {
-          console.log("not owner");
+          return App.defaultView();
         }
       });
     });
+  },
+
+  defaultView: function() {
+    document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
   },
 
   storeOwnerView: function() {
@@ -143,7 +147,12 @@ App = {
 
     for(i=0; i<length; i++) {
       let requester = await MarketplaceInstance.getRequestedStoreOwner(i);
-      requesters.push(requester);
+      // Check if a requester is already a store owner. Only add to array if not.
+      let isStoreOwner = await MarketplaceInstance.checkStoreOwnerStatus(requester);
+      console.log(isStoreOwner);
+      if (!isStoreOwner) {
+        requesters.push(requester);
+      }
     }
     return requesters
   },
