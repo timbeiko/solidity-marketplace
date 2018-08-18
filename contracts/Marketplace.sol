@@ -28,11 +28,13 @@ contract Marketplace is Ownable, Killable {
 			_;
 	}
 
+	// This function should maybe be set to onlyOwner as well... 
 	function addAdmin(address admin) onlyAdmin public {
 		administrators[admin] = true;
 		emit AdminAdded(admin);
 	}
 
+	// There should maybe be an "owner UI", but perhaps that's overkill...
 	function removeAdmin(address admin) onlyOwner public {
 		if (administrators[admin] == true)
 			administrators[admin] = false;

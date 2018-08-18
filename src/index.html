@@ -80,8 +80,34 @@
       </div> <!-- end of adminView --> 
 
       <div id="storeOwnerView" style="display: none;">
-        <p>You are a store owner</p>
-      </div>
+        <div>
+           <div>
+              <h2>Create a storefront</h2>
+              <p>Enter the storefront name below</p>
+              <p>
+                <form id="createStorefront">
+                  <input id="storefrontName" type="text">
+                  <input class="btn btn-default btn-create-storefront" type="submit" value="Create">
+                </form>
+              </p>
+            </div>
+
+          <div>
+            <h2>Your Storefronts</h2>
+
+            <div id="storefronts">
+              
+            </div>
+
+            <div id="storefrontTemplate" style="display: none;">
+              <p>
+                Storefront ID: <span id="storefrontId"> 0x0 </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div> <!-- end of storeOwnerView -->
+
 
       <div id="defaultView" style="display: none;">
         <p>

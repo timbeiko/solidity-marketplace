@@ -39,7 +39,7 @@ App = {
       var AdoptionArtifact = data;
       App.contracts.Adoption = TruffleContract(AdoptionArtifact);
       App.contracts.Adoption.setProvider(App.web3Provider);
-
+      App.bindEvents();
       return App.markAdopted();
     });
 
@@ -47,12 +47,20 @@ App = {
       var MarketplaceArtifact = data;
       App.contracts.Marketplace = TruffleContract(MarketplaceArtifact);
       App.contracts.Marketplace.setProvider(App.web3Provider);
-      return App.checkAdmin();
     });
 
-    return App.bindEvents();
+
+    $.getJSON('Stores.json', function(data) {
+      var StoresArtifact = data;
+      App.contracts.Stores = TruffleContract(StoresArtifact);
+      App.contracts.Stores.setProvider(App.web3Provider);
+    });
+
+
+    return App.checkAdmin();
   },
 
+  // Status validation functions
   checkAdmin: function() {
     var MarketplaceInstance;
     web3.eth.getAccounts(function(error, accounts) {
@@ -96,6 +104,7 @@ App = {
     });
   },
 
+  // View setup functions
   defaultView: function() {
     document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
     $('#defaultView').attr('style', '');
@@ -113,28 +122,13 @@ App = {
     $(document).on('click', '.btn-request-store', App.requestStoreOwnerStatus);
   },
 
-  requestStoreOwnerStatus: function(event) {
-    var requesterAddr = $(event.target).data('addr');
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-      var account = accounts[0];
-      var MarketplaceInstance;
-      App.contracts.Marketplace.deployed().then(function(instance) {
-        MarketplaceInstance = instance;
-        return MarketplaceInstance.requestStoreOwnerStatus({from: account});
-      }).then(function(){
-        $(event.target).text('Request sent').attr('disabled', true);
-      });
-    });
-  },
-
   storeOwnerView: function() {
     document.getElementById("pageTitle").innerHTML = "Store Owner View"
     $('#storeOwnerView').attr('style', '');
     $('#adminView').attr('style', 'display: none;');
     $('#defaultView').attr('style', 'display: none;');
+    App.createStorefront();
+    App.storefrontListView();
   },
 
   adminView: function() {
@@ -176,6 +170,24 @@ App = {
           $(document).on('click', '.btn-approve-requester', App.approveRequester);
         }
       })
+    });
+  },
+
+  // Marketplace functions
+  requestStoreOwnerStatus: function(event) {
+    var requesterAddr = $(event.target).data('addr');
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+      var MarketplaceInstance;
+      App.contracts.Marketplace.deployed().then(function(instance) {
+        MarketplaceInstance = instance;
+        return MarketplaceInstance.requestStoreOwnerStatus({from: account});
+      }).then(function(){
+        $(event.target).text('Request sent').attr('disabled', true);
+      });
     });
   },
 
@@ -299,6 +311,69 @@ App = {
     });
   },
 
+  // Storefront functions 
+  createStorefront: function() {
+    let name;
+    var StoresInstance;
+
+    $('#createStorefront').submit(function( event ) {
+      name = $("input#storefrontName").val();
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Stores.deployed().then(function(instance) {
+          StoresInstance = instance;
+          return StoresInstance.createStorefront(name, {from: account});
+        });
+      });
+      event.preventDefault();
+    });
+  },
+
+  storefrontListView: function(e) {
+    var storefrontsDiv = $('#storefronts');
+    var storefrontTemplate = $('#storefrontTemplate'); 
+    var StoresInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.Stores.deployed().then(function(instance) {
+        StoresInstance = instance;
+        return StoresInstance.getStorefrontCount(account);
+      }).then(function(length) {
+        return App.getStorefronts(Number(length), account);
+      }).then(function(storefronts) {
+        for(i=0; i<storefronts.length; i++) {
+          storefrontTemplate.find('#storefrontId').text(storefronts[i]);
+          storefrontsDiv.append(storefrontTemplate.html());
+        }
+      })
+    });
+  },
+
+  getStorefronts: async function(length, account) {
+    let storefronts = [];
+    let StoresInstance = await App.contracts.Stores.deployed();
+
+    for(i=0; i<length; i++) {
+      let sf = await StoresInstance.getStorefrontsId(account, i);
+      storefronts.push(sf);
+    }
+
+    // Remove duplicates, if any
+    let s = new Set(storefronts);
+    let vals = s.values();
+    return Array.from(vals); 
+  },
+
+  // Pet Shop Box functions 
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleAdopt);
   },
