@@ -101,12 +101,14 @@ contract Stores is Ownable, Killable {
 	returns (bytes32) {
 		bytes32 id = keccak256(abi.encodePacked(msg.sender, name, now));
 		Storefront memory s = Storefront(id, name, msg.sender, 0);
+		 // This is problematic if a past element has been deleted
 		storefronts[msg.sender].push(s.id);
 		storefrontById[id] = s;
 		emit StorefrontCreated(id, name, msg.sender, getStorefrontCount(msg.sender));
 		return s.id; 
 	}
 
+	// Need to handle balance somehow
 	function removeStorefront(bytes32 id) 
 	onlyStorefrontOwner(id) 
 	public {

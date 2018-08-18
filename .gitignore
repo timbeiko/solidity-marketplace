@@ -1,0 +1,5 @@
+# Do not commit .json contracts to repo 
+build/contracts/*
+ # Logs	
+logs	
+*.log	
