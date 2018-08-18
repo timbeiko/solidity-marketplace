@@ -71,6 +71,9 @@ contract Marketplace is Ownable, Killable {
 		return storeOwners[storeOwner];
 	}
 
+	// Need to update this --- not working for a bunch of reasons:
+	// 1. Validate if after setting things to 0x0, it will still push store owners to that spot 
+	// 2. Make sure to track the count better (i.e. subtract if requester[i] == 0x0), like in Stores.sol
 	function removeStoreOwnersFromRequestList() onlyAdmin public {
 		uint emptySpots = 0; 
 		uint requestLength = requestedStoreOwners.length;

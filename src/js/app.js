@@ -142,6 +142,12 @@ App = {
     $('#adminView').attr('style', '');
     $('#storeOwnerView').attr('style', 'display: none;');
     $('#defaultView').attr('style', 'display: none;');
+
+    // Configure forms and buttons 
+    App.removeStoreOwnerStatus();
+    App.addAdmin();
+    App.removeAdmin();
+    $(document).on('click', '.btn-clear-list', App.removeStoreOwnersFromRequestList);
     return App.requesterListView();
   },
 
@@ -171,8 +177,6 @@ App = {
         }
       })
     });
-
-    return App.removeStoreOwnerStatus();
   },
 
   removeStoreOwnerStatus: function() {
@@ -195,6 +199,51 @@ App = {
     });
   },
 
+  addAdmin: function() {
+    let addr;
+    var MarketplaceInstance;
+
+    $('#addAdmin').submit(function( event ) {
+      addr = $("input#adminAddrAdd").val();
+      console.log(addr);
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+
+        var account = accounts[0];
+        App.contracts.Marketplace.deployed().then(function(instance) {
+          MarketplaceInstance = instance;
+          console.log(addr)
+          return MarketplaceInstance.addAdmin(addr, {from: account});
+        });
+      });
+      event.preventDefault();
+    });
+  },
+
+  removeAdmin: function() {
+    var addr;
+    var MarketplaceInstance;
+
+    $('#removeAdmin').submit(function( event ) {
+      addr = $( "input#adminAddrRem" ).val();
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Marketplace.deployed().then(function(instance) {
+          MarketplaceInstance = instance;
+          return MarketplaceInstance.removeAdmin(addr, {from: account});
+        });
+      });
+      event.preventDefault();
+    });
+  },
+
+  // Some of the validation that's being done here should maybe 
+  // be done in Marketplace.sol instead 
   getRequesters: async function(length) {
     let requesters = [];
     let MarketplaceInstance = await App.contracts.Marketplace.deployed();
@@ -207,7 +256,11 @@ App = {
         requesters.push(requester);
       }
     }
-    return requesters
+
+    // Remove duplicates 
+    let s = new Set(requesters);
+    let vals = s.values();
+    return Array.from(vals);
   },
 
   approveRequester: function(event) {
@@ -224,6 +277,24 @@ App = {
         return MarketplaceInstance.approveStoreOwnerStatus(requesterAddr, {from: account});
       }).then(function() {
         $(event.target).text('Approved!').attr('disabled', true);
+      })
+    });
+  },
+
+  removeStoreOwnersFromRequestList: function(event) {
+    var MarketplaceInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+      App.contracts.Marketplace.deployed().then(function(instance) {
+        MarketplaceInstance = instance;
+        return MarketplaceInstance.removeStoreOwnersFromRequestList({from: account});
+      }).then(function() {
+        $(event.target).text('Done!').attr('disabled', true);
       })
     });
   },

@@ -30,10 +30,12 @@
 
       <div id="adminView" style="display: none;">
         <div class="container">
-          <div id="marketplace">
-
+          <div>
+            <h2>Requested Store Owners</h2>
+            <div id="marketplace">
+              <!--- requests go here -->
+            </div>
             <div id="requesterTemplate" style="display: none;">
-              <h2>Requested Store Owners</h2>
               <p>
                 <span class="requesterAddress"> 0x0 </span>
                 <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
@@ -42,12 +44,36 @@
 
             <div>
               <h2>Remove a Store Owner</h2>
+              <p>Enter the address below</p>
               <p>
                 <form id="removeStoreOwner">
                   <input id="removeAddr" type="text">
                   <input class="btn btn-default btn-remove-owner" type="submit" value="Remove">
                 </form>
               </p>
+            </div>
+
+            <div>
+              <h2>Add Admin</h2>
+                <p>Enter the address below</p>
+                <form id="addAdmin">
+                  <input id="adminAddrAdd" type="text">
+                  <input class="btn btn-default btn-add-admin" type="submit" value="Add">
+                </form>    
+            </div>
+
+            <div>
+              <h2>Remove Admin</h2>
+              <p>Enter the address below</p>
+                <form id="removeAdmin">
+                  <input id="adminAddrRem" type="text">
+                  <input class="btn btn-default btn-remove-admin" type="submit" value="Remove">
+                </form>    
+            </div>
+
+            <div>
+              <h2>Clean Requests List [not working]</h2>
+              <button class="btn btn-default btn-clear-list" type="button">Clean List </button>
             </div>
         </div>
         </div>
