@@ -99,6 +99,9 @@ App = {
 
   defaultView: function() {
     document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
+    $('#defaultView').attr('style', '');
+    $('#adminView').attr('style', 'display: none;');
+    $('#storeOwnerView').attr('style', 'display: none;');
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -130,15 +133,25 @@ App = {
 
   storeOwnerView: function() {
     document.getElementById("pageTitle").innerHTML = "Store Owner View"
+    $('#storeOwnerView').attr('style', '');
+    $('#adminView').attr('style', 'display: none;');
+    $('#defaultView').attr('style', 'display: none;');
   },
 
   adminView: function() {
+    document.getElementById("pageTitle").innerHTML = "Marketplace Administrator View"
+    $('#adminView').attr('style', '');
+    $('#storeOwnerView').attr('style', 'display: none;');
+    $('#defaultView').attr('style', 'display: none;');
+
+    return App.requesterListView();
+  },
+
+  requesterListView: function() {
     var marketplaceDiv = $('#marketplace');
     var requesterTemplate = $('#requesterTemplate'); 
     var approveButton = $('.btn-approve-requester');
     var MarketplaceInstance;
-    document.getElementById("pageTitle").innerHTML = "Marketplace Administrator View"
-
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
