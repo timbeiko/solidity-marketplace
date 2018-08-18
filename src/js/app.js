@@ -35,29 +35,29 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON('Adoption.json', function(data) {
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
-      App.contracts.Adoption.setProvider(App.web3Provider);
-      App.bindEvents();
-      return App.markAdopted();
+    $.when(
+      $.getJSON('Adoption.json', function(data) {
+        var AdoptionArtifact = data;
+        App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+        App.contracts.Adoption.setProvider(App.web3Provider);
+        App.bindEvents();
+        return App.markAdopted();
+      }),
+
+      $.getJSON('Marketplace.json', function(data) {
+        var MarketplaceArtifact = data;
+        App.contracts.Marketplace = TruffleContract(MarketplaceArtifact);
+        App.contracts.Marketplace.setProvider(App.web3Provider);
+      }),
+
+      $.getJSON('Stores.json', function(data) {
+        var StoresArtifact = data;
+        App.contracts.Stores = TruffleContract(StoresArtifact);
+        App.contracts.Stores.setProvider(App.web3Provider);
+      })
+    ).then(function() {
+      return App.checkAdmin();
     });
-
-    $.getJSON('Marketplace.json', function(data) {
-      var MarketplaceArtifact = data;
-      App.contracts.Marketplace = TruffleContract(MarketplaceArtifact);
-      App.contracts.Marketplace.setProvider(App.web3Provider);
-    });
-
-
-    $.getJSON('Stores.json', function(data) {
-      var StoresArtifact = data;
-      App.contracts.Stores = TruffleContract(StoresArtifact);
-      App.contracts.Stores.setProvider(App.web3Provider);
-    });
-
-
-    return App.checkAdmin();
   },
 
   // Status validation functions
