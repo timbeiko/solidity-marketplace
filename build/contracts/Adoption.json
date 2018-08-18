@@ -288,10 +288,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        61,
-                        62
+                        1200,
+                        1201
                       ],
-                      "referencedDeclaration": 61,
+                      "referencedDeclaration": 1200,
                       "src": "151:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -374,7 +374,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 58,
+                        "referencedDeclaration": 1197,
                         "src": "207:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -850,10 +850,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        61,
-                        62
+                        1200,
+                        1201
                       ],
-                      "referencedDeclaration": 61,
+                      "referencedDeclaration": 1200,
                       "src": "151:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
@@ -936,7 +936,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 58,
+                        "referencedDeclaration": 1197,
                         "src": "207:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -1194,8 +1194,14 @@
       "links": {},
       "address": "0x1d77b1dadf4df9b0942af244180f91d0fee23607",
       "transactionHash": "0x3d639273ac8f4e11774b24931143c223994a036ff93dad4427e3e6f7d4b4d0a8"
+    },
+    "1534605694801": {
+      "events": {},
+      "links": {},
+      "address": "0x255f6409470be861791e24e97f194d38adbad863",
+      "transactionHash": "0x3d639273ac8f4e11774b24931143c223994a036ff93dad4427e3e6f7d4b4d0a8"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-18T00:57:29.574Z"
+  "updatedAt": "2018-08-18T15:21:48.656Z"
 }

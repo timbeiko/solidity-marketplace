@@ -82,13 +82,37 @@ App = {
   },
 
   checkStoreOwner: function() {
-    console.log("Check store owner")    
+    var MarketplaceInstance;
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.Marketplace.deployed().then(function(instance) {
+        MarketplaceInstance = instance;
+        return MarketplaceInstance.checkStoreOwnerStatus(account);
+      }).then(function(isOwner) {
+        if (isOwner) {
+          return App.storeOwnerView();
+        } else {
+          console.log("not owner");
+        }
+      });
+    });
+  },
+
+  storeOwnerView: function() {
+    document.getElementById("pageTitle").innerHTML = "Store Owner View"
   },
 
   adminView: function() {
     var marketplaceDiv = $('#marketplace');
     var requesterTemplate = $('#requesterTemplate'); 
+    var approveButton = $('.btn-approve-requester');
     var MarketplaceInstance;
+    document.getElementById("pageTitle").innerHTML = "Marketplace Administrator View"
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -105,11 +129,12 @@ App = {
       }).then(function(requesters) {
         for(i=0; i<requesters.length; i++) {
           requesterTemplate.find('.requesterAddress').text(requesters[i]);
+          approveButton.attr('data-addr', requesters[i]);
           marketplaceDiv.append(requesterTemplate.html());
+          $(document).on('click', '.btn-approve-requester', App.approveRequester);
         }
       })
     });
-
   },
 
   getRequesters: async function(length) {
@@ -121,6 +146,25 @@ App = {
       requesters.push(requester);
     }
     return requesters
+  },
+
+  approveRequester: function(event) {
+    var requesterAddr = $(event.target).data('addr');
+    var MarketplaceInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+      App.contracts.Marketplace.deployed().then(function(instance) {
+        MarketplaceInstance = instance;
+        return MarketplaceInstance.approveStoreOwnerStatus(requesterAddr, {from: account});
+      }).then(function() {
+        $(event.target).text('Approved!').attr('disabled', true);
+        console.log(event.target);
+      })
+    });
   },
 
   bindEvents: function() {

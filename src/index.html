@@ -19,6 +19,15 @@
   </head>
   <body>
     <div class="container">
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h1 id="pageTitle" class="text-center">Pete's Pet Shop</h1>
+          <hr/>
+          <br/>
+        </div>
+      </div>
+
       <div class="container">
         <div id="marketplace">
         <!-- Marketplace stuff --> 
@@ -26,15 +35,10 @@
       </div>
 
       <div id="requesterTemplate" style="display: none;">
-        <p>Address: <span class="requesterAddress"> 0x0 </span></p>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">Pete's Pet Shop</h1>
-          <hr/>
-          <br/>
-        </div>
+        <p>
+          Request for: <span class="requesterAddress"> 0x0 </span>
+          <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
+        </p>
       </div>
 
       <div id="petsRow" class="row">
