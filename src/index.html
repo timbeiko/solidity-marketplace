@@ -28,25 +28,35 @@
         </div>
       </div>
 
-      <div class="container">
-        <div id="marketplace">
-        <!-- Marketplace stuff --> 
+      <div id="adminView">
+        <div class="container">
+          <div id="marketplace">
+          <!-- Marketplace stuff --> 
+          </div>
+        </div>
+
+        <div id="requesterTemplate" style="display: none;">
+          <p>
+            Request for: <span class="requesterAddress"> 0x0 </span>
+            <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
+          </p>
         </div>
       </div>
 
-      <div id="requesterTemplate" style="display: none;">
+      <div id="storeOwnerView">
+      </div>
+
+      <div id="defaultView">
         <p>
-          Request for: <span class="requesterAddress"> 0x0 </span>
-          <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
+          <button class="btn btn-default btn-request-store" type="button" data-addr="0x0"> Request to be a store owner </button>
         </p>
       </div>
 
-      <div id="petsRow" class="row">
-        <!-- PETS LOAD HERE -->
-      </div>
+<!--       <div id="petsRow" class="row">
+      </div> -->
     </div>
 
-    <div id="petTemplate" style="display: none;">
+<!--     <div id="petTemplate" style="display: none;">
       <div class="col-sm-6 col-md-4 col-lg-3">
         <div class="panel panel-default panel-pet">
           <div class="panel-heading">
@@ -63,7 +73,7 @@
         </div>
       </div>
     </div>
-
+ -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

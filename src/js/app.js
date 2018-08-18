@@ -69,12 +69,6 @@ App = {
         if (isAdmin) {
           return App.adminView();
         } else {
-
-
-          // REMOVE THIS. Hack to populate the requested store owner array 
-          MarketplaceInstance.requestStoreOwnerStatus();
-
-
           return App.checkStoreOwner();
         }
       });
@@ -105,6 +99,33 @@ App = {
 
   defaultView: function() {
     document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+     $('.btn-request-store').attr('data-addr', accounts[0]);
+    });
+
+    $('.btn-request-store').attr('data-addr', "test");
+    $(document).on('click', '.btn-request-store', App.requestStoreOwnerStatus);
+  },
+
+  requestStoreOwnerStatus: function(event) {
+    var requesterAddr = $(event.target).data('addr');
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+      var MarketplaceInstance;
+      App.contracts.Marketplace.deployed().then(function(instance) {
+        MarketplaceInstance = instance;
+        return MarketplaceInstance.requestStoreOwnerStatus({from: account});
+      }).then(function(){
+        $(event.target).text('Request sent').attr('disabled', true);
+      });
+    });
   },
 
   storeOwnerView: function() {
@@ -149,7 +170,6 @@ App = {
       let requester = await MarketplaceInstance.getRequestedStoreOwner(i);
       // Check if a requester is already a store owner. Only add to array if not.
       let isStoreOwner = await MarketplaceInstance.checkStoreOwnerStatus(requester);
-      console.log(isStoreOwner);
       if (!isStoreOwner) {
         requesters.push(requester);
       }
@@ -171,7 +191,6 @@ App = {
         return MarketplaceInstance.approveStoreOwnerStatus(requesterAddr, {from: account});
       }).then(function() {
         $(event.target).text('Approved!').attr('disabled', true);
-        console.log(event.target);
       })
     });
   },
