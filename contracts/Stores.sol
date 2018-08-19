@@ -228,6 +228,7 @@ contract Stores is Ownable, Killable {
 	}
 
 	function getProductId(bytes32 storefrontId, uint productIndex) 
+	constant
 	public 
 	returns (bytes32) {
 		return bytes32(inventories[storefrontId][productIndex]); 

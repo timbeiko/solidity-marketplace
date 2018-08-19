@@ -353,30 +353,22 @@ App = {
     });
   },
 
-  storefrontListView: function(e) {
+  storefrontListView: async function(e) {
     var storefrontsDiv = $('#storefronts');
     var storefrontTemplate = $('#storefrontTemplate'); 
-    var StoresInstance;
 
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.Stores.deployed().then(function(instance) {
-        StoresInstance = instance;
-        return StoresInstance.getStorefrontCount(account);
-      }).then(function(length) {
-        return App.getStorefronts(Number(length), account);
-      }).then(function(storefronts) {
-        for(i=0; i<storefronts.length; i++) {
-          storefrontTemplate.find('#storefrontId').text(storefronts[i]);
-          storefrontsDiv.append(storefrontTemplate.html());
-        }
-      })
-    });
+    let accounts = web3.eth.accounts;
+    let account = accounts[0];
+    let StoresInstance = await App.contracts.Stores.deployed();
+    let storefrontsLength = await StoresInstance.getStorefrontCount(account);
+    let storefronts = await App.getStorefronts(Number(storefrontsLength), account);
+    for(i=0; i<storefronts.length; i++) {
+      let storefrontBalance = await StoresInstance.getStorefrontBalance(storefronts[i]);
+      storefrontTemplate.find('#storefrontId').text(storefronts[i]);
+      storefrontTemplate.find('#storefrontBalance').text(storefrontBalance);
+      storefrontTemplate.find('#storefrontLink').attr('href', "/storefront.html?id=" + storefronts[i]);
+      storefrontsDiv.append(storefrontTemplate.html());
+    }
   },
 
   getStorefronts: async function(length, account) {
@@ -393,6 +385,8 @@ App = {
     let vals = s.values();
     return Array.from(vals); 
   },
+
+  
 
   // Pet Shop Box functions 
   bindEvents: function() {
