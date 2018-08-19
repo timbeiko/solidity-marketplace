@@ -144,7 +144,6 @@ App = {
 
     for(i=0; i<productIDs.length; i++) {
       let product = await StoresInstance.getProduct(productIDs[i]);
-      console.log(product);
       productTemplate.find('#productName').text(product[0]);
       productTemplate.find('#productDesc').text(product[1]);
       productTemplate.find('#productPrice').text(Number(product[2]));
@@ -152,9 +151,36 @@ App = {
       productTemplate.find('#productID').text(productIDs[i]);
       productPurchaseForm.find('#purchaseQty').attr("max", Number(product[3]));
       productPurchaseForm.find('#productID').attr("value", productIDs[i]);
-      productPurchaseForm.find('#productPrice').attr("value", Number(product[2]));
+      productPurchaseForm.find('#purchasePrice').attr("value", Number(product[2]));
       productsDiv.append(productTemplate.html());
     }
+
+    App.purchaseProduct();
+  },
+
+  purchaseProduct: function() {
+    var StoresInstance;
+
+    $('#buyProduct').submit(function( event ) {
+      let qty = $("input#purchaseQty").val();
+      let id = $("input#productID").val();
+      let price = $("input#purchasePrice").val();
+
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Stores.deployed().then(function(instance) {
+          StoresInstance = instance;
+          return StoresInstance.purchaseProduct(
+            App.storefrontID,
+            id,
+            qty, {from: account, value: web3.toWei(qty*price)});
+        });
+      });
+      event.preventDefault();
+    });
   },
 
   getProducts: async function(length, account) {

@@ -42,3 +42,4 @@ Additional information about the project can be found [here](https://docs.google
 
 # TODOs
 - [ ] Update visibility for all functions 
+- [ ] Fix purchasing of products (quantity going down but ETH from msg.sender isn't, weird redirects, etc.)
