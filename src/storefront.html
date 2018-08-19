@@ -64,11 +64,25 @@
           <!-- rendered storefronts -->
         </div>
         <div id="productTemplate" style="display: none;">
-          <h4 id=productName>Name</h3>
-          <p> <span id="productDesc"> Description </span></p>
-          <p>Price: <span id="productPrice"> 0 </span> Ξ</p>
-          <p>Quantity <span id="productQuantity">0</span>
-          </p>
+            <div class="panel panel-default col-xs-12 col-sm-3 col-sm-offset-1">
+              <div class="panel-body">
+                <h4 id=productName>Name</h3>
+                <p> <span id="productDesc"> Description </span></p>
+                <p>Price: <span id="productPrice"> 0 </span> Ξ</p>
+                <p>Quantity: <span id="productQuantity">0</span></p>
+                <span id="productID" style="display: none;"></span>
+                <br>
+
+                <h5>Purchase Product</h5> 
+                <form id="buyProduct">
+                  Quantity: 
+                  <input id="purchaseQty" type="number" min="0">
+                  <input type="hidden" id="productID" name="ID" value="0x">
+                  <input type="hidden" id="productPrice" name="Price" value="0">
+                  <input class="btn btn-default btn-purchase" type="submit" value="Buy">
+                </form>
+              </div>
+            </div>
         </div>
       </div>
 

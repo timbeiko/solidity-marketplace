@@ -134,6 +134,7 @@ App = {
   productListView: async function(e) {
     var productsDiv = $('#products');
     var productTemplate = $('#productTemplate'); 
+    var productPurchaseForm = $('#buyProduct');
 
     let accounts = web3.eth.accounts;
     let account = accounts[0];
@@ -142,15 +143,16 @@ App = {
     let productIDs = await App.getProducts(Number(productsLength), account);
 
     for(i=0; i<productIDs.length; i++) {
-      let price = await StoresInstance.getProductPrice(productIDs[i]);
-      console.log(Number(price));
-      let name = await StoresInstance.getProductName(productIDs[i]);
-      console.log(name);
-      
-      productTemplate.find('#productName').text("PRODUCT NAME");
-      productTemplate.find('#productDesc').text("PRODUCT DESC");
-      productTemplate.find('#productPrice').text("price");
-      productTemplate.find('#productQuantity').text(99);
+      let product = await StoresInstance.getProduct(productIDs[i]);
+      console.log(product);
+      productTemplate.find('#productName').text(product[0]);
+      productTemplate.find('#productDesc').text(product[1]);
+      productTemplate.find('#productPrice').text(Number(product[2]));
+      productTemplate.find('#productQuantity').text(Number(product[3]));
+      productTemplate.find('#productID').text(productIDs[i]);
+      productPurchaseForm.find('#purchaseQty').attr("max", Number(product[3]));
+      productPurchaseForm.find('#productID').attr("value", productIDs[i]);
+      productPurchaseForm.find('#productPrice').attr("value", Number(product[2]));
       productsDiv.append(productTemplate.html());
     }
   },
