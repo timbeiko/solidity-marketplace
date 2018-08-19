@@ -198,6 +198,25 @@ contract Stores is Ownable, Killable {
 		return productById[productId].price;
 	}
 
+	function getProductName(bytes32 productId) 
+	constant 
+	public 
+	returns (string) {
+		return productById[productId].name;
+	}
+
+
+	function getProduct(bytes32 productId)
+	constant 
+	public
+	returns (string, string, uint, uint, bytes32) {
+		return (productById[productId].name,
+				productById[productId].description,
+				productById[productId].price,
+				productById[productId].qty,
+				productById[productId].storefrontId);
+	}
+
 	function removeProduct(bytes32 storefrontId, bytes32 productId) 
 	onlyStorefrontOwner(storefrontId) 
 	public {

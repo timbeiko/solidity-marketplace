@@ -140,13 +140,16 @@ App = {
     let StoresInstance = await App.contracts.Stores.deployed();
     let productsLength = await StoresInstance.getProductCount(App.storefrontID);
     let productIDs = await App.getProducts(Number(productsLength), account);
-    console.log(App.storefrontID);
-    console.log(productsLength);
+
     for(i=0; i<productIDs.length; i++) {
       let price = await StoresInstance.getProductPrice(productIDs[i]);
+      console.log(Number(price));
+      let name = await StoresInstance.getProductName(productIDs[i]);
+      console.log(name);
+      
       productTemplate.find('#productName').text("PRODUCT NAME");
       productTemplate.find('#productDesc').text("PRODUCT DESC");
-      productTemplate.find('#productPrice').text(price);
+      productTemplate.find('#productPrice').text("price");
       productTemplate.find('#productQuantity').text(99);
       productsDiv.append(productTemplate.html());
     }

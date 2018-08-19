@@ -100,6 +100,27 @@ contract('Stores', async (accounts) => {
 		assert.equal(productCount, 3);
 	});
 
+	it("getProduct should return all attributes from a product", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsId(storeOwner, 0); 
+		await stores.addProduct(storefrontId, "Test Product 1", "A test product", 100000, 100, {from: storeOwner});
+		let productId = await stores.addProduct.call(storefrontId, "Test Product 1", "A test product", 100000, 100, {from: storeOwner});
+		let productInfo = await stores.getProduct(productId);
+
+		// All info should match 
+		assert.equal(productInfo[0], "Test Product 1");
+		assert.equal(productInfo[1], "A test product");
+		assert.equal(productInfo[2].toNumber(), 100000);
+		assert.equal(productInfo[3].toNumber(), 100);
+		assert.equal(productInfo[4], storefrontId);
+
+	});
+
 	it("Should allow a storefront owner to update the price of a product from their storefront", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
