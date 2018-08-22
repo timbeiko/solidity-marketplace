@@ -1,6 +1,17 @@
 var Marketplace = artifacts.require("./Marketplace.sol");
 var Stores = artifacts.require("./Stores.sol");
 
+const promisify = (inner) =>
+  new Promise((resolve, reject) =>
+    inner((err, res) => {
+      if (err) { reject(err) }
+      resolve(res);
+    })
+  );
+
+const getBalance = (account, at) =>
+  promisify(cb => web3.eth.getBalance(account, at, cb));
+
 contract('Stores', async (accounts) => {
 	it("Should allow store owners to create a storefront", async () => {
 		let marketplace = await Marketplace.deployed();
@@ -170,8 +181,9 @@ contract('Stores', async (accounts) => {
 	it("Should allow someone to purchase a product if they pay >= its price", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
-		let productPrice = 100000;
+		let productPrice = web3.toWei(10);
 		let buyer = accounts[5];
+		let initialBalance = await getBalance(buyer);
 
 		// Creating storefront 
 		let storeOwner = accounts[1];
@@ -185,12 +197,20 @@ contract('Stores', async (accounts) => {
 		await stores.getProductCount(storefrontId);
 
 		// Purchase the product 
-		await stores.purchaseProduct(storefrontId, productId, 1, {from: buyer, value: productPrice});
+		let receipt = await stores.purchaseProduct(storefrontId, productId, 1, {from: buyer, value: productPrice});
+		let gasUsed = receipt.receipt.gasUsed;
+		let tx = await web3.eth.getTransaction(receipt.tx);
+		let gasPrice = tx.gasPrice;
+		let gasCost = gasUsed * gasPrice;
+
 		let balance = await stores.getStorefrontBalance(storefrontId);
 		assert.equal(balance, productPrice);
 
 		let contractBalance = await stores.getBalance();
 		assert.equal(contractBalance, productPrice);
+
+		let finalBalance = await getBalance(buyer);
+		assert.equal(initialBalance.toNumber()-productPrice-gasCost, finalBalance.toNumber());
 	});
 
 	it("Should allow someone to purchase multiple products if they pay >= the total", async() => {

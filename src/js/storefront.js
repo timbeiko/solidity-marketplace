@@ -1,3 +1,14 @@
+const promisify = (inner) =>
+  new Promise((resolve, reject) =>
+    inner((err, res) => {
+      if (err) { reject(err) }
+      resolve(res);
+    })
+  );
+
+const getBalance = (account, at) =>
+  promisify(cb => web3.eth.getBalance(account, at, cb));
+
 App = {
   web3Provider: null,
   contracts: {},
@@ -69,6 +80,7 @@ App = {
   defaultView: function() {
     document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
     $('#storeOwnerView').attr('style', 'display: none;');
+    App.productListView();
   },
 
   storeOwnerView: function() {
@@ -176,8 +188,22 @@ App = {
           return StoresInstance.purchaseProduct(
             App.storefrontID,
             id,
-            qty, {from: account, value: web3.toWei(qty*price)});
-        });
+            qty, {from: account, value: web3.toWei(qty*price, 'ether')});
+        }).then(function(res, err) {
+          console.log(res);
+          console.log(err);
+        }).then(function() {
+          return StoresInstance.getBalance();
+        }).then(function(balance) {
+          console.log("Contract: " + Number(balance));
+        }).then(function () {
+          return StoresInstance.getStorefrontBalance(App.storefrontID);
+        }).then(function(storeBalance) {
+          console.log("Storefront: " + Number(storeBalance));
+          return getBalance(account);
+        }).then(function(balance) {
+          console.log("Account: " + Number(balance));
+        })
       });
       event.preventDefault();
     });
