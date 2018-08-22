@@ -40,8 +40,8 @@ App = {
         var AdoptionArtifact = data;
         App.contracts.Adoption = TruffleContract(AdoptionArtifact);
         App.contracts.Adoption.setProvider(App.web3Provider);
-        App.bindEvents();
-        return App.markAdopted();
+        // App.bindEvents();
+        // return App.markAdopted();
       }),
 
       $.getJSON('Marketplace.json', function(data) {
@@ -129,7 +129,9 @@ App = {
     $('#defaultView').attr('style', 'display: none;');
     App.createStorefront();
     App.deleteStorefront();
-    App.storefrontListView();
+    App.storefrontListView().then( function() {
+      App.withdrawStorefrontBalance();
+    });
   },
 
   adminView: function() {
@@ -356,6 +358,7 @@ App = {
   storefrontListView: async function(e) {
     var storefrontsDiv = $('#storefronts');
     var storefrontTemplate = $('#storefrontTemplate'); 
+    var withdrawForm = $('#wf');
 
     let accounts = web3.eth.accounts;
     let account = accounts[0];
@@ -367,6 +370,7 @@ App = {
       storefrontTemplate.find('#storefrontId').text(storefronts[i]);
       storefrontTemplate.find('#storefrontBalance').text(storefrontBalance);
       storefrontTemplate.find('#storefrontLink').attr('href', "/storefront.html?id=" + storefronts[i]);
+      withdrawForm.find('#storefrontId').attr("value", storefronts[i]);
       storefrontsDiv.append(storefrontTemplate.html());
     }
   },
@@ -386,55 +390,78 @@ App = {
     return Array.from(vals); 
   },
 
-  
+  withdrawStorefrontBalance: function() {
+    var StoresInstance;
 
-  // Pet Shop Box functions 
-  bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
-  },
+    $('#wf').click(function(event) {
+      let id = $("input#storefrontId").val();
+      console.log(id);
 
-  markAdopted: function(adopters, account) {
-    var adoptionInstance; 
-
-    App.contracts.Adoption.deployed().then(function(instance) {
-      adoptionInstance = instance;
-      return adoptionInstance.getAdopters.call();
-    }).then(function(adopters) {
-      for(i=0; i<adopters.length; i++) {
-        if (adopters[i] != '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
         }
-      }
-    }).catch(function(err) {
-      console.log(err.message);
-    });
-  },
 
-  handleAdopt: function(event) {
-    event.preventDefault();
-
-    var petId = parseInt($(event.target).data('id'));
-
-    var adoptionInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.Adoption.deployed().then(function(instance) {
-        adoptionInstance = instance;
-
-        return adoptionInstance.adopt(petId, {from: account});
-      }).then(function(result) {
-        return App.markAdopted();
-      }).catch(function(err) {
-        console.log(err.message);
+        var account = accounts[0];
+        App.contracts.Stores.deployed().then(function(instance) {
+          StoresInstance = instance;
+          return StoresInstance.withdrawStorefrontBalance(id, {from: account});
+        }).then(function(res, err) {
+          console.log(res);
+          console.log(err);
+        });
       });
+      event.preventDefault();
     });
   }
+
+  // Pet Shop Box functions 
+  // bindEvents: function() {
+  //   $(document).on('click', '.btn-adopt', App.handleAdopt);
+  // },
+
+  // markAdopted: function(adopters, account) {
+  //   var adoptionInstance; 
+
+  //   App.contracts.Adoption.deployed().then(function(instance) {
+  //     adoptionInstance = instance;
+  //     return adoptionInstance.getAdopters.call();
+  //   }).then(function(adopters) {
+  //     for(i=0; i<adopters.length; i++) {
+  //       if (adopters[i] != '0x0000000000000000000000000000000000000000') {
+  //         $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+  //       }
+  //     }
+  //   }).catch(function(err) {
+  //     console.log(err.message);
+  //   });
+  // },
+
+  // handleAdopt: function(event) {
+  //   event.preventDefault();
+
+  //   var petId = parseInt($(event.target).data('id'));
+
+  //   var adoptionInstance;
+
+  //   web3.eth.getAccounts(function(error, accounts) {
+  //     if (error) {
+  //       console.log(error);
+  //     }
+
+  //     var account = accounts[0];
+
+  //     App.contracts.Adoption.deployed().then(function(instance) {
+  //       adoptionInstance = instance;
+
+  //       return adoptionInstance.adopt(petId, {from: account});
+  //     }).then(function(result) {
+  //       return App.markAdopted();
+  //     }).catch(function(err) {
+  //       console.log(err.message);
+  //     });
+  //   });
+  // }
 
 };
 
