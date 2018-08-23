@@ -5,40 +5,133 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 # Requirements
 ## User Interface Requirements:
 - [x] Run the app on a dev server locally for testing/grading
+	- See `Running the Project` below. 
 - [x] You should be able to visit a URL and interact with the application
+	- The application will be at `http://localhost:3000/`
 - [x] App recognizes current account
 - [x] Sign transactions using MetaMask
+	- Once MetaMask is configured to the application network (`localhost:8545`), users can interact with it using MetaMask
 - [x] Contract state is updated
 	- [x] Update reflected in UI
+		- See `User Stories`. Updates require refreshing the page.  
  
 ## Test Requirements:
 - [x] Write 5 tests for each contract you wrote
+	- Most tests were written in Javascript, for flexibility
 	- [x] Solidity 
+		- See `/test/TestMarketplace.sol` and `/test/TestStores.sol`
 	- [x] JavaScript
-- [ ] Explain why you wrote those tests
+		- See `/test/marketplace.js` and `/test/stores.js`
+- [ ] [TODO] Explain why you wrote those tests
 - [x] Tests run with truffle test
+	- Yes. See `Testing` under `Running the Project`
  
-## Design Pattern Requirements:
+## [TODO] Design Pattern Requirements:
 - [ ] Implement emergency stop
 - [ ] What other design patterns have you used / not used?
 	- [ ] Why did you choose the patterns that you did?
 	- [ ] Why not others?
  
-## Security Tools / Common Attacks:
+## [TODO] Security Tools / Common Attacks:
 - [ ] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
 
-## Other
+## [TODO] Other
 - [ ] Use a library (via EthPM)
 
-## Stretch Requirement
+## [TODO] Stretch Requirement
 - [ ] Integrate with an additional service, for example:
 	- [ ] IPFS
 	- [ ] uPort
 	- [ ] Ethereum Name Service
 	- [ ] Oracle
 
+*** 
+
+# Running the Project 
+TODO. 
+
+## Requirements 
+
+## Getting Stared 
+
+## Testing 
+
+***
+
+# User Stories
+The goal of this section is to explain to graders how to use the app to evaluate the various user stories. 
+
+###### It is important to note that because of my very very basic front-end skills, you will need to refresh the page manually after performing an action or after a transaction has confirmed to see the updated state. 
+
+## List Of Stores  
+### Story
+There are a list of stores on a central marketplace where shoppers can purchase goods posted by the store owners.
+
+### [TO BE IMPLEMENTED] Try It Out 
+After having created storefronts (see below), go to the homepage (`http://localhost:3000/`) with an account that is neither an `admin` or `storeowner` and you will see a list of all storefronts. 
+
+
+## Admin Marketplace Management 
+
+### Story 
+An administrator opens the web app. The web app reads the address and identifies that the user is an admin, showing them admin only functions, such as managing store owners. 
+
+### Try It Out
+The account that deploys the contract will by default be an `admin`. After deploying the contract, simply log into the first account on MetaMask associated with your passphrase and admin only functions will be shown. 
+
+### Story 
+An admin adds an address to the list of approved store owners, so if the owner of that address logs into the app, they have access to the store owner functions.
+
+### Try It Out
+The flow here is a bit different than in the story. To do this, first you will need to visit the homepage (`http://localhost:3000/`) with a **non** `admin` account, and click the `Request to be a store owner` button. 
+
+Once your transaction has confirmed, switch back to an `admin` account and visit the homepage. Under the `Requested Store Owners` header, you should see the address of the account that has sent in the request. To make the address a `storeowner`, click the `Approve` button and submit the transaction. 
+
+Once that transaction has confirmed, switch back to the account from which you created the request, and it should now display store owner functions. 
+
+
+## Store Owner Functionality 
+
+### Story 
+An approved store owner logs into the app. The web app recognizes their address and identifies them as a store owner. They are shown the store owner functions. 
+
+### Try It Out 
+See `Admin Marketplace Management` above to make an account a `storeowner`. After this, the homepage (`http://localhost:3000/`) should display store owner functionality. 
+
+### Story 
+They can create a new storefront that will be displayed on the marketplace. They can also see the storefronts that they have already created. They can click on a storefront to manage it. 
+
+### Try It Out 
+With a `storeowner` account, on the homepage, you will see a `Create a storefront` section. There, you can enter the name for a new store front, and after clicking `Create`, it will be created. After the transaction has confirmed, refresh the page to see the new store front, along with its `id` and `balance` under `Your Storefronts
+`. To manage the store front, simply click its name. 
+
+
+### Story 
+They can add/remove products to the storefront or change any of the products’ prices. They can also withdraw any funds that the store has collected from sales.
+
+### [TO BE IMPLEMENTED] Try It Out 
+Soon. 
+
+## Shopper Functionality 
+
+### Story 
+A shopper logs into the app. The web app does not recognize their address so they are shown the generic shopper application. From the main page they can browse all of the storefronts that have been created in the marketplace. Clicking on a storefront will take them to a product page. 
+
+### [TO BE IMPLEMENTED] Try It Out 
+Soon. 
+
+### Story 
+They can see a list of products offered by the store, including their price and quantity. Shoppers can purchase a product, which will debit their account and send it to the store. The quantity of the item in the store’s inventory will be reduced by the appropriate amount.
+
+### Try It Out 
+To purchase a product, on a store front page, simply select the desired quantity and click `Buy`. A transaction will be created with the amount being the price of the product multiplied by the quantity. Once the transaction is confirmed, the value will be sent to the contract, and the quantity for the product will be updated after refreshing the page. 
+
+## Full Requirements Document 
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
+
+
+
 
 # TODOs
 - [ ] Update visibility for all functions 
