@@ -263,9 +263,8 @@ contract Stores is Ownable, Killable {
 		require(qty <= product.qty);
 
 		// If amount sent is too large, refund the difference
-		uint refund = 0; 
 		if (msg.value > total) {
-			refund = msg.value - total;
+			uint refund = msg.value - total;
 			msg.sender.transfer(refund);
 		}
 

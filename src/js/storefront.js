@@ -114,7 +114,7 @@ App = {
             App.storefrontID,
             name,
             desc,
-            Number(price),
+            web3.toWei(Number(price)),
             Number(qty), {from: account});
         });
       });
@@ -158,12 +158,12 @@ App = {
       let product = await StoresInstance.getProduct(productIDs[i]);
       productTemplate.find('#productName').text(product[0]);
       productTemplate.find('#productDesc').text(product[1]);
-      productTemplate.find('#productPrice').text(Number(product[2]));
+      productTemplate.find('#productPrice').text(web3.fromWei(Number(product[2])));
       productTemplate.find('#productQuantity').text(Number(product[3]));
       productTemplate.find('#productID').text(productIDs[i]);
       productPurchaseForm.find('#purchaseQty').attr("max", Number(product[3]));
       productPurchaseForm.find('#productID').attr("value", productIDs[i]);
-      productPurchaseForm.find('#purchasePrice').attr("value", Number(product[2]));
+      productPurchaseForm.find('#purchasePrice').attr("value", web3.fromWei(Number(product[2])));
       productsDiv.append(productTemplate.html());
     }
 
@@ -174,9 +174,9 @@ App = {
     var StoresInstance;
 
     $('#buyProduct').submit(function( event ) {
-      let qty = $("input#purchaseQty").val();
-      let id = $("input#productID").val();
-      let price = $("input#purchasePrice").val();
+      let qty = $(this).closest("form").find("input[name='qty']").val();
+      let id = $(this).closest("form").find("input[name='id']").val();
+      let price = $(this).closest("form").find("input[name='price']").val();
 
       web3.eth.getAccounts(function(error, accounts) {
         if (error) {
@@ -188,22 +188,8 @@ App = {
           return StoresInstance.purchaseProduct(
             App.storefrontID,
             id,
-            qty, {from: account, value: web3.toWei(qty*price, 'ether')});
-        }).then(function(res, err) {
-          console.log(res);
-          console.log(err);
-        }).then(function() {
-          return StoresInstance.getBalance();
-        }).then(function(balance) {
-          console.log("Contract: " + Number(balance));
-        }).then(function () {
-          return StoresInstance.getStorefrontBalance(App.storefrontID);
-        }).then(function(storeBalance) {
-          console.log("Storefront: " + Number(storeBalance));
-          return getBalance(account);
-        }).then(function(balance) {
-          console.log("Account: " + Number(balance));
-        })
+            qty, {from: account, value: web3.toWei(qty*price)});
+        });
       });
       event.preventDefault();
     });
