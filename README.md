@@ -130,9 +130,5 @@ To purchase a product, on a store front page, simply select the desired quantity
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
-
-
-
 # TODOs
 - [ ] Update visibility for all functions 
-- [ ] Fix purchasing of products (quantity going down but ETH from msg.sender isn't, weird redirects, etc.)
