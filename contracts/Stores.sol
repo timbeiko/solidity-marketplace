@@ -102,7 +102,6 @@ contract Stores is Ownable, Destructible {
 	returns (bytes32) {
 		bytes32 id = keccak256(abi.encodePacked(msg.sender, name, now));
 		Storefront memory s = Storefront(id, name, msg.sender, 0);
-		 // This is problematic if a past element has been deleted
 		storefrontsByOwner[msg.sender].push(s.id);
 		storefrontById[id] = s;
 		storefronts.push(s.id);
@@ -110,7 +109,6 @@ contract Stores is Ownable, Destructible {
 		return s.id; 
 	}
 
-	// Need to handle balance somehow
 	function removeStorefront(bytes32 id) 
 	onlyStorefrontOwner(id) 
 	public {
@@ -141,6 +139,15 @@ contract Stores is Ownable, Destructible {
 				break;
 			}
 		}
+
+		// Withdraw Balance 
+		uint storefrontBalance = storefrontById[id].balance;
+		if (storefrontBalance > 0) {
+			msg.sender.transfer(storefrontBalance);
+			storefrontById[id].balance = 0;
+			emit BalanceWithdrawn(id, storefrontBalance);
+		}
+
 		// Remove from storefrontById 
 		delete storefrontById[id];
 		emit StorefrontRemoved(id);

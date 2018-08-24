@@ -65,6 +65,32 @@ contract('Stores', async (accounts) => {
 		assert.equal(storeCount, 0);
 	});
 
+	it("Should withdraw the balance of a storefront upon if the storefront is removed", async() => {
+		let marketplace = await Marketplace.new();
+		let stores = await Stores.new(marketplace.address);
+		let productPrice = web3.toWei(10);
+
+		let storeOwner = accounts[1];
+		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+		await stores.createStorefront("Test store", {from: storeOwner});
+		let storefrontId = await stores.getStorefrontsId(storeOwner, 0); 
+		await stores.addProduct(storefrontId, "Test Product 1", "A test product", productPrice, 100, {from: storeOwner});
+		let productId = await stores.addProduct.call(storefrontId, "Test Product 1", "A test product", productPrice, 100, {from: storeOwner});
+		await stores.purchaseProduct(storefrontId, productId, 1, {from: accounts[2], value: productPrice});
+		let storefrontBalance = await stores.getStorefrontBalance(storefrontId);
+		assert.equal(storefrontBalance, productPrice);
+
+		let initialBalance = await getBalance(storeOwner);
+		let receipt = await stores.removeStorefront(storefrontId, {from: storeOwner});
+		let finalBalance = await getBalance(storeOwner);
+		let gasUsed = receipt.receipt.gasUsed;
+		let tx = await web3.eth.getTransaction(receipt.tx);
+		let gasPrice = tx.gasPrice;
+		let gasCost = gasUsed * gasPrice;
+
+		assert.equal(Number(initialBalance) + Number(productPrice) - Number(gasCost), Number(finalBalance));
+	});
+
 	it("Should allow *not* allow non-storefront owners to remove an owner's storefront", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
