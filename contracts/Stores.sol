@@ -182,6 +182,13 @@ contract Stores is Ownable, Killable {
 		return storefronts[storefrontIndex];
 	}
 
+	function getStorefrontOwner(bytes32 storefrontId) 
+	constant 
+	public 
+	returns (address) {
+		return storefrontById[storefrontId].owner;
+	}
+
 	function getStorefrontsId(address owner, uint storefrontIndex) 
 	constant 
 	public 

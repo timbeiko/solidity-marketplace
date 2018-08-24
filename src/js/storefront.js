@@ -123,6 +123,7 @@ App = {
   productListView: async function(e) {
     var productsDiv = $('#products');
     var productTemplate = $('#productTemplate'); 
+    var productUpdateForm = $('.updateProduct');
     var productPurchaseForm = $('#buyProduct');
 
     let accounts = web3.eth.accounts;
@@ -136,6 +137,8 @@ App = {
     let productsLength = await StoresInstance.getProductCount(App.storefrontID);
     let productIDs = await App.getProducts(Number(productsLength), account);
 
+    let storefrontOwnerAddress = await StoresInstance.getStorefrontOwner(App.storefrontID);
+
     for(i=0; i<productIDs.length; i++) {
       let product = await StoresInstance.getProduct(productIDs[i]);
       productTemplate.find('#productName').text(product[0]);
@@ -143,12 +146,21 @@ App = {
       productTemplate.find('#productPrice').text(web3.fromWei(Number(product[2])));
       productTemplate.find('#productQuantity').text(Number(product[3]));
       productTemplate.find('#productID').text(productIDs[i]);
-      productPurchaseForm.find('#purchaseQty').attr("max", Number(product[3]));
-      productPurchaseForm.find('#productID').attr("value", productIDs[i]);
-      productPurchaseForm.find('#purchasePrice').attr("value", web3.fromWei(Number(product[2])));
+
+      // Different buttons for storeowners vs. purchasers 
+      if (storefrontOwnerAddress === account) {
+        productUpdateForm.attr('style', '');
+        productUpdateForm.find('#productID').attr("value", productIDs[i]);
+      } else {
+        productPurchaseForm.attr('style', '');
+        productPurchaseForm.find('#purchaseQty').attr("max", Number(product[3]));
+        productPurchaseForm.find('#productID').attr("value", productIDs[i]);
+        productPurchaseForm.find('#purchasePrice').attr("value", web3.fromWei(Number(product[2])));
+      }
       productsDiv.append(productTemplate.html());
     }
 
+    App.updateProductPrice();
     App.purchaseProduct();
   },
 
@@ -171,6 +183,28 @@ App = {
             App.storefrontID,
             id,
             qty, {from: account, value: web3.toWei(qty*price)});
+        });
+      });
+      event.preventDefault();
+    });
+  },
+
+  updateProductPrice: function() {
+    $('.updateProduct').submit(function( event ) {
+      let id = $(this).closest("form").find("input[name='id']").val();
+      let price = $(this).closest("form").find("input[name='price']").val();
+
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Stores.deployed().then(function(instance) {
+          StoresInstance = instance;
+          return StoresInstance.updateProductPrice(
+            App.storefrontID,
+            id,
+            web3.toWei(price), {from: account});
         });
       });
       event.preventDefault();

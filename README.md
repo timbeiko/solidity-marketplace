@@ -61,7 +61,9 @@ TODO.
 # User Stories
 The goal of this section is to explain to graders how to use the app to evaluate the various user stories. 
 
-###### It is important to note that because of my very very basic front-end skills, you will need to refresh the page manually after performing an action or after a transaction has confirmed to see the updated state. 
+#### Important 
+	- You will need to refresh the page manually after a transaction has confirmed to see the updated state (ex: if creating a new storefront, wait for the transaction to confirm, refresh, and the storefront will be there)
+	- Most transactions (ex: creating a storefront, withdrawing a balance, etc.) will require more gas than the default provided by MetaMask. Set the gas to `100000` or more when sending a transaction. 
 
 ## List Of Stores  
 ### Story
@@ -111,8 +113,15 @@ With a `storeowner` account, on the homepage, you will see a `Create a storefron
 ### Story 
 They can add/remove products to the storefront or change any of the products’ prices. 
 
-### [TODO] Try It Out 
-Soon. 
+### Try It Out 
+
+#### Adding a Product
+As a `storeowner`, click on any created storefront from the homepage. On the storefront page, (`http://localhost:3000/id={storefrontId}`), fill in the information in the `Add a Product` section, and click the button. After the transaction is confirmed, refresh the page and the product should appear in the `Products For Sale` section.  
+
+#### [TODO] Remove a Product
+
+#### Change A Product's Price 
+As a `storeowner`, click on any created storefront from the homepage. On the storefront page, (`http://localhost:3000/id={storefrontId}`), after having added a product, in the `Products For Sale` section, you will be able to change a product's price by updating the value and submitting the `Update Product Price` form.
 
 ### Story 
 They can  withdraw any funds that the store has collected from sales.
@@ -139,12 +148,12 @@ To purchase a product, on a store front page, simply select the desired quantity
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
 # TODOs
-- [ ] Fix withdrawal of balance for multiple storefronts (similarly to buying when there are multiple products)
 - [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
 	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
 		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
 	- [ ] Change product buttons for store owners to not buy their own products and instead be able to remove them and update the price or something 
 - [ ] Update visibility for all functions 
+- [ ] Add navbar 
 
 
 

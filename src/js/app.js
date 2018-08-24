@@ -348,7 +348,7 @@ App = {
   storefrontListView: async function(e) {
     var storefrontsDiv = $('#storefronts');
     var storefrontTemplate = $('#storefrontTemplate'); 
-    var withdrawForm = $('#wf');
+    var withdrawForm = $('.wf');
 
     let accounts = web3.eth.accounts;
     let account = accounts[0];
@@ -359,7 +359,7 @@ App = {
       let storefrontBalance = await StoresInstance.getStorefrontBalance(storefronts[i]);
       let storefrontName = await StoresInstance.getStorefrontName(storefronts[i]);
       storefrontTemplate.find('#storefrontId').text(storefronts[i]);
-      storefrontTemplate.find('#storefrontBalance').text(storefrontBalance);
+      storefrontTemplate.find('#storefrontBalance').text(web3.fromWei(storefrontBalance));
       storefrontTemplate.find('#storefrontLink').text(storefrontName);
       storefrontTemplate.find('#storefrontLink').attr('href', "/storefront.html?id=" + storefronts[i]);
       withdrawForm.find('#storefrontId').attr("value", storefronts[i]);
@@ -385,8 +385,9 @@ App = {
   withdrawStorefrontBalance: function() {
     var StoresInstance;
 
-    $('#wf').click(function(event) {
-      let id = $("input#storefrontId").val();
+    $('.wf').click(function(event) {
+      let id = $(this).closest("form").find("input[name='ID']").val();
+      // let id = $("input#storefrontId").val();
       console.log(id);
 
       web3.eth.getAccounts(function(error, accounts) {
@@ -400,6 +401,7 @@ App = {
           return StoresInstance.withdrawStorefrontBalance(id, {from: account});
         });
       });
+      window.location.reload();
       event.preventDefault();
     });
   }
