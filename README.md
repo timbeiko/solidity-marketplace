@@ -132,3 +132,8 @@ Additional information about the project can be found [here](https://docs.google
 
 # TODOs
 - [ ] Update visibility for all functions 
+- [ ] Add section about adding admins 
+- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
+	- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
+
+

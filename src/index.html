@@ -98,7 +98,7 @@
                 <!-- rendered storefronts -->
               </div>
               <div id="storefrontTemplate" style="display: none;">
-                <h4><a id="storefrontLink" href="/storefront.html?id=0x0"> Name [to add]</a></h4>
+                <h4><a id="storefrontLink" href="/storefront.html?id=0x0">Name</a></h4>
                 <p> ID: <span id="storefrontId"> 0x0 </span></p>
                 <p>Balance: <span id="storefrontBalance"> 0x0 </span></p>
 
@@ -128,6 +128,16 @@
         <p>
           <button class="btn btn-default btn-request-store" type="button" data-addr="0x0"> Request to be a store owner </button>
         </p>
+
+        <h2>Active Stores</h2>
+        <div id="storefrontList">
+          <!--- requests go here -->
+        </div>
+        <div id="storefrontListItem" style="display: none;">
+          <p>
+            <h4><a id="storefrontListItemName" href="/storefront.html?id=0x0">Name</a></h4>
+          </p>
+        </div>
       </div>
 
 <!--       <div id="petsRow" class="row">

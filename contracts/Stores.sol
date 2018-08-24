@@ -73,7 +73,8 @@ contract Stores is Ownable, Killable {
 		address buyer,
 		uint newQuantity);
 
-	mapping (address => bytes32[]) public storefronts; 
+	bytes32[] public storefronts;
+	mapping (address => bytes32[]) public storefrontsByOwner; 
 	mapping (bytes32 => Storefront) public storefrontById;
 	mapping (bytes32 => bytes32[]) public inventories; 
 	mapping (bytes32 => Product) public productById;
@@ -102,8 +103,9 @@ contract Stores is Ownable, Killable {
 		bytes32 id = keccak256(abi.encodePacked(msg.sender, name, now));
 		Storefront memory s = Storefront(id, name, msg.sender, 0);
 		 // This is problematic if a past element has been deleted
-		storefronts[msg.sender].push(s.id);
+		storefrontsByOwner[msg.sender].push(s.id);
 		storefrontById[id] = s;
+		storefronts.push(s.id);
 		emit StorefrontCreated(id, name, msg.sender, getStorefrontCount(msg.sender));
 		return s.id; 
 	}
@@ -120,12 +122,22 @@ contract Stores is Ownable, Killable {
 			delete productById[inventory[i]];
 			delete inventory[i];
 		}
-		// Remove from storefronts mapping
-		uint sfCount = storefronts[msg.sender].length; 
+
+		// Remove from storefrontsByOwner mapping
+		uint sfCount = storefrontsByOwner[msg.sender].length; 
 		for(i=0; i<sfCount; i++) {
-			if (storefronts[msg.sender][i] == id) {
-				storefronts[msg.sender][i] = storefronts[msg.sender][sfCount-1]; 
-				delete storefronts[msg.sender][sfCount-1];
+			if (storefrontsByOwner[msg.sender][i] == id) {
+				storefrontsByOwner[msg.sender][i] = storefrontsByOwner[msg.sender][sfCount-1]; 
+				delete storefrontsByOwner[msg.sender][sfCount-1];
+				break;
+			}
+		}
+
+		// Remove from storefronts array 
+		sfCount = storefronts.length;
+		for(i=0; i<sfCount; i++) {
+			if (storefronts[i] == id) {
+				delete storefronts[i];
 				break;
 			}
 		}
@@ -145,22 +157,43 @@ contract Stores is Ownable, Killable {
 		}
 	}
 
+	function getTotalStorefrontsCount() 
+	constant 
+	public 
+	returns (uint) {
+		return storefronts.length;
+	}
+
 	function getStorefrontCount(address owner) 
 	constant 
 	public 
 	returns (uint) {
-		uint initialCount = storefronts[owner].length;
-		for(uint i=0; i<storefronts[owner].length; i++)
-			if (storefronts[owner][i] == 0x0000000000000000000000000000000000000000000000000000000000000000)
+		uint initialCount = storefrontsByOwner[owner].length;
+		for(uint i=0; i<storefrontsByOwner[owner].length; i++)
+			if (storefrontsByOwner[owner][i] == 0x0000000000000000000000000000000000000000000000000000000000000000)
 				initialCount -= 1; 
 		return initialCount;
+	}
+
+	function getStorefrontId(uint storefrontIndex) 
+	constant 
+	public
+	returns (bytes32) {
+		return storefronts[storefrontIndex];
 	}
 
 	function getStorefrontsId(address owner, uint storefrontIndex) 
 	constant 
 	public 
 	returns (bytes32) {
-		return storefronts[owner][storefrontIndex];
+		return storefrontsByOwner[owner][storefrontIndex];
+	}
+
+	function getStorefrontName(bytes32 storefrontId) 
+	constant 
+	public 
+	returns (string) {
+		return storefrontById[storefrontId].name;
 	}
 
 	function getStorefrontBalance(bytes32 storefrontId) 
