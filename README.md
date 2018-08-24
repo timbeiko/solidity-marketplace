@@ -26,18 +26,19 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 - [x] Tests run with truffle test
 	- Yes. See `Testing` under `Running the Project`
  
-## [TODO] Design Pattern Requirements:
+## [TODO] Design Pattern Requirements (in design_pattern_desicions.md):
 - [ ] Implement emergency stop
 - [ ] What other design patterns have you used / not used?
 	- [ ] Why did you choose the patterns that you did?
 	- [ ] Why not others?
  
-## [TODO] Security Tools / Common Attacks:
+## [TODO] Security Tools / Common Attacks (in avoiding_common_attacks.md):
 - [ ] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
 
 ## Other
 - [x] Use a library (via EthPM)
 	- The `zeppelin` library is used (installed under `/installed_contracts/zeppelin`)
+- [ ] [TODO] "Smart Contract code should be commented according to the specs in [the documentation](https://solidity.readthedocs.io/en/v0.4.21/layout-of-source-files.html#comments)
 
 ## [TODO] Stretch Requirement
 - [ ] Integrate with an additional service, for example:
@@ -152,5 +153,6 @@ Additional information about the project can be found [here](https://docs.google
 - [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
 	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
 		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
+- [ ] Refactor a bunch of things... someday.
 
 
