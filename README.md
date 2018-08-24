@@ -37,11 +37,8 @@ Each of the two contracts has `.sol` and `.js` tests, all located under `/test`.
 
 ## Project Requirements 
 
-To see how to test the project for the given requirements, see `user_stories.md`
-
-## Full Requirements Document 
-
-Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
+The project requirements are described below.
+To see how to test the project for the required functionality, see `user_stories.md`
 
 *** 
 
@@ -92,6 +89,11 @@ Additional information about the project can be found [here](https://docs.google
 	- [ ] uPort
 	- [ ] Ethereum Name Service
 	- [ ] Oracle
+
+## Full Requirements Document 
+
+Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
+
 
 ***
 
