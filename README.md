@@ -51,11 +51,17 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 *** 
 
 # Running the Project 
-TODO. 
 
 ## Requirements 
 
+To run this project, you will need the following:
+- Truffle (`npm install -g truffle`)
+- Ganache CLI (`npm install -g ganache-cli`)
+	- You can also use the Ganache Application
+
 ## Getting Stared 
+
+After cloning this repository, 
 
 ## Testing 
 
