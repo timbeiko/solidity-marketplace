@@ -81,7 +81,6 @@ App = {
 
   // View setup functions
   defaultView: function() {
-    document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
     $('#defaultView').attr('style', '');
     $('#adminView').attr('style', 'display: none;');
     $('#storeOwnerView').attr('style', 'display: none;');
@@ -127,7 +126,7 @@ App = {
   },
 
   adminView: function() {
-    document.getElementById("pageTitle").innerHTML = "Marketplace Administrator View"
+    document.getElementById("pageTitle").innerHTML = "Administrator View"
     $('#adminView').attr('style', '');
     $('#storeOwnerView').attr('style', 'display: none;');
     $('#defaultView').attr('style', 'display: none;');

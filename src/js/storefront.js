@@ -78,13 +78,11 @@ App = {
 
   // View setup functions
   defaultView: function() {
-    document.getElementById("pageTitle").innerHTML = "Welcome To The Marketplace!"
     $('#storeOwnerView').attr('style', 'display: none;');
     App.productListView();
   },
 
   storeOwnerView: function() {
-    document.getElementById("pageTitle").innerHTML = "Store Owner View"
     $('#storeOwnerView').attr('style', '');
     $('#defaultView').attr('style', 'display: none;');
     App.addProduct();
@@ -122,27 +120,6 @@ App = {
     });
   },
 
-  // Convert this to "delete product" later
-  // deleteStorefront: function() {
-  //   let id;
-  //   var StoresInstance;
-
-  //   $('#deleteStorefront').submit(function( event ) {
-  //     id = $("input#storefrontId").val();
-  //     web3.eth.getAccounts(function(error, accounts) {
-  //       if (error) {
-  //         console.log(error);
-  //       }
-  //       var account = accounts[0];
-  //       App.contracts.Stores.deployed().then(function(instance) {
-  //         StoresInstance = instance;
-  //         return StoresInstance.removeStorefront(id, {from: account});
-  //       });
-  //     });
-  //     event.preventDefault();
-  //   });
-  // },
-
   productListView: async function(e) {
     var productsDiv = $('#products');
     var productTemplate = $('#productTemplate'); 
@@ -151,6 +128,11 @@ App = {
     let accounts = web3.eth.accounts;
     let account = accounts[0];
     let StoresInstance = await App.contracts.Stores.deployed();
+    
+    let storefrontName = await StoresInstance.getStorefrontName(App.storefrontID);
+    document.getElementById("pageTitle").innerHTML = storefrontName;
+    document.title = storefrontName;
+
     let productsLength = await StoresInstance.getProductCount(App.storefrontID);
     let productIDs = await App.getProducts(Number(productsLength), account);
 
