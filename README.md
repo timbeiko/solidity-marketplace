@@ -148,12 +148,10 @@ To purchase a product, on a store front page, simply select the desired quantity
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
 # TODOs
-- [ ] "Add a Product" should only shown if it is *your* storefront, not any storefront (just like the buttons).
 - [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
 	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
 		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
 	- [ ] Change product buttons for store owners to not buy their own products and instead be able to remove them and update the price or something 
-- [ ] Update visibility for all functions 
 
 
 

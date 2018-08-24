@@ -57,22 +57,20 @@ App = {
 
   checkStoreOwner: function() {
     var MarketplaceInstance;
-    web3.eth.getAccounts(function(error, accounts) {
+    web3.eth.getAccounts(async function(error, accounts) {
       if (error) {
         console.log(error);
       }
-      var account = accounts[0];
 
-      App.contracts.Marketplace.deployed().then(function(instance) {
-        MarketplaceInstance = instance;
-        return MarketplaceInstance.checkStoreOwnerStatus(account);
-      }).then(function(isOwner) {
-        if (isOwner) {
-          return App.storeOwnerView();
-        } else {
-          return App.defaultView();
-        }
-      });
+      var account = accounts[0];
+      let StoresInstance = await App.contracts.Stores.deployed();
+      let storefrontOwnerAddress = await StoresInstance.getStorefrontOwner(App.storefrontID);
+
+      if (account === storefrontOwnerAddress) {
+        return App.storeOwnerView();
+      } else {
+        return App.defaultView();
+      }
     });
   },
 
