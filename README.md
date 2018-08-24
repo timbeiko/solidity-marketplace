@@ -67,7 +67,7 @@ The goal of this section is to explain to graders how to use the app to evaluate
 ### Story
 There are a list of stores on a central marketplace where shoppers can purchase goods posted by the store owners.
 
-### [TO BE IMPLEMENTED] Try It Out 
+### Try It Out 
 After having created storefronts (see below), go to the homepage (`http://localhost:3000/`) with an account that is neither an `admin` or `storeowner` and you will see a list of all storefronts. 
 
 
@@ -89,6 +89,8 @@ Once your transaction has confirmed, switch back to an `admin` account and visit
 
 Once that transaction has confirmed, switch back to the account from which you created the request, and it should now display store owner functions. 
 
+### Note
+To add more admins, simply visit the home page as an `admin` and enter a desired `admin`'s address in the `Add Admin` form. After the transaction is confirmed, that account will now also be an `admin`. 
 
 ## Store Owner Functionality 
 
@@ -107,18 +109,24 @@ With a `storeowner` account, on the homepage, you will see a `Create a storefron
 
 
 ### Story 
-They can add/remove products to the storefront or change any of the products’ prices. They can also withdraw any funds that the store has collected from sales.
+They can add/remove products to the storefront or change any of the products’ prices. 
 
-### [TO BE IMPLEMENTED] Try It Out 
+### [TODO] Try It Out 
 Soon. 
+
+### Story 
+They can  withdraw any funds that the store has collected from sales.
+
+### Try It Out 
+As a `storeowner`, visit the homepage (`http://localhost:3000/`). Under the name and ID of each store front, the balance will be listed. A `storeowner` can use the `Withdraw balance` button to withdraw the total balance of a  storefront. After the transaction has confirmed, the balance for that store front will now be 0, and the `storeowner`'s account balance will have been incremented by the total balance of the store. 
 
 ## Shopper Functionality 
 
 ### Story 
 A shopper logs into the app. The web app does not recognize their address so they are shown the generic shopper application. From the main page they can browse all of the storefronts that have been created in the marketplace. Clicking on a storefront will take them to a product page. 
 
-### [TO BE IMPLEMENTED] Try It Out 
-Soon. 
+### Try It Out 
+After having created at least one store front, simply visit the homepage (`http://localhost:3000/`) with any account that is neither an `admin` or `storeowner` to see a list of all store fronts with links to each of them. 
 
 ### Story 
 They can see a list of products offered by the store, including their price and quantity. Shoppers can purchase a product, which will debit their account and send it to the store. The quantity of the item in the store’s inventory will be reduced by the appropriate amount.
@@ -131,9 +139,12 @@ To purchase a product, on a store front page, simply select the desired quantity
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
 # TODOs
+- [ ] Fix withdrawal of balance for multiple storefronts (similarly to buying when there are multiple products)
+- [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
+	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
+		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
+	- [ ] Change product buttons for store owners to not buy their own products and instead be able to remove them and update the price or something 
 - [ ] Update visibility for all functions 
-- [ ] Add section about adding admins 
-- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
-	- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
+
 
 

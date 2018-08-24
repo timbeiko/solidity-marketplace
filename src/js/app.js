@@ -97,7 +97,6 @@ App = {
       length = Number(length);
 
       let storefrontListDiv = $('#storefrontList');
-      console.log(storefrontListDiv);
       let storefrontTemplate = $('#storefrontListItem');
       for(let i=0; i<length; i++) {
         let id = await StoresInstance.getStorefrontId(i);
@@ -399,9 +398,6 @@ App = {
         App.contracts.Stores.deployed().then(function(instance) {
           StoresInstance = instance;
           return StoresInstance.withdrawStorefrontBalance(id, {from: account});
-        }).then(function(res, err) {
-          console.log(res);
-          console.log(err);
         });
       });
       event.preventDefault();
