@@ -18,8 +18,11 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container">
+    <nav class="navbar navbar-default">
+      <button class="btn navbar-btn btn-request-store" type="button" data-addr="0x0" style="display: none;"> <b> Request to be a store owner </b></button>
+    </nav>
 
+    <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-push-2">
           <h1 id="pageTitle" class="text-center">Welcome to the Marketplace</h1>
@@ -125,10 +128,6 @@
 
 
       <div id="defaultView" style="display: none;">
-        <p>
-          <button class="btn btn-default btn-request-store" type="button" data-addr="0x0"> Request to be a store owner </button>
-        </p>
-
         <h2>Active Stores</h2>
         <div id="storefrontList">
           <!--- requests go here -->

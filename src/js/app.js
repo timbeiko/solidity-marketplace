@@ -91,6 +91,8 @@ App = {
       }
 
       $('.btn-request-store').attr('data-addr', accounts[0]);
+      $('.btn-request-store').attr('style', '');
+
 
       let StoresInstance = await App.contracts.Stores.deployed();
       let length = await StoresInstance.getTotalStorefrontsCount();

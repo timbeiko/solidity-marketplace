@@ -85,7 +85,7 @@ The account that deploys the contract will by default be an `admin`. After deplo
 An admin adds an address to the list of approved store owners, so if the owner of that address logs into the app, they have access to the store owner functions.
 
 ### Try It Out
-The flow here is a bit different than in the story. To do this, first you will need to visit the homepage (`http://localhost:3000/`) with a **non** `admin` account, and click the `Request to be a store owner` button. 
+The flow here is a bit different than in the story. To do this, first you will need to visit the homepage (`http://localhost:3000/`) with a **non** `admin` account, and click the `Request to be a store owner` button in the top-left of the page. 
 
 Once your transaction has confirmed, switch back to an `admin` account and visit the homepage. Under the `Requested Store Owners` header, you should see the address of the account that has sent in the request. To make the address a `storeowner`, click the `Approve` button and submit the transaction. 
 
@@ -148,12 +148,12 @@ To purchase a product, on a store front page, simply select the desired quantity
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
 # TODOs
+- [ ] "Add a Product" should only shown if it is *your* storefront, not any storefront (just like the buttons).
 - [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
 	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
 		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
 	- [ ] Change product buttons for store owners to not buy their own products and instead be able to remove them and update the price or something 
 - [ ] Update visibility for all functions 
-- [ ] Add navbar 
 
 
 
