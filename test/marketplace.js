@@ -52,23 +52,6 @@ contract('Marketplace', function(accounts) {
   	});
   });
 
-  it("Should *not* let a non-owner account remove an admin", function() {
-  	return Marketplace.deployed().then(function(instance) {
-  		marketplaceInstance = instance;
-  		owner = accounts[0];
-  		admin = accounts[1];
-  		account = accounts[2]
-  		return marketplaceInstance.addAdmin(admin, {from: owner});
-  	}).then(function() {
-  		return marketplaceInstance.removeAdmin(owner, {from: account});
-  	}).then(function() {
-  		return marketplaceInstance.removeAdmin(owner, {from: account});
-  	}).then(function() {
-  		// owner should still be an admin 
-  		assert(marketplaceInstance.checkAdmin(owner), true);
-  	});
-  });
-
   it("Should allow anyone to request to be a store owner", function() {
     return Marketplace.deployed().then(function(instance) {
       marketplaceInstance = instance; 

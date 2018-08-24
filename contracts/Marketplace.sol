@@ -1,14 +1,14 @@
 pragma solidity ^0.4.2;
 
-import "./zeppelin/ownership/Ownable.sol";
-import './zeppelin/lifecycle/Killable.sol';
+import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
+import "../installed_contracts/zeppelin/contracts/lifecycle/Destructible.sol";
 
 /*
 * Marketplace 
 *
 * This is the main contract for the Marketplace implementation.
 */
-contract Marketplace is Ownable, Killable {
+contract Marketplace is Ownable, Destructible {
 	constructor() public {
 		administrators[msg.sender] = true;
 	}

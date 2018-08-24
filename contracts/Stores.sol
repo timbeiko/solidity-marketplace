@@ -1,7 +1,7 @@
 pragma solidity ^0.4.2;
 
-import "./zeppelin/ownership/Ownable.sol";
-import './zeppelin/lifecycle/Killable.sol';
+import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
+import "../installed_contracts/zeppelin/contracts/lifecycle/Destructible.sol";
 import './Marketplace.sol';
 
 /*
@@ -9,7 +9,7 @@ import './Marketplace.sol';
 *
 * This is the main contract for the Store implementation.
 */
-contract Stores is Ownable, Killable {
+contract Stores is Ownable, Destructible {
 	address public marketplaceId; 
 	Marketplace public marketplaceInstance; 
 

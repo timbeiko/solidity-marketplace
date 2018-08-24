@@ -35,8 +35,9 @@ This repository contains the implementation of a marketplace in Solidity. It is 
 ## [TODO] Security Tools / Common Attacks:
 - [ ] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
 
-## [TODO] Other
-- [ ] Use a library (via EthPM)
+## Other
+- [x] Use a library (via EthPM)
+	- The `zeppelin` library is used (installed under `/installed_contracts/zeppelin`)
 
 ## [TODO] Stretch Requirement
 - [ ] Integrate with an additional service, for example:
@@ -151,7 +152,5 @@ Additional information about the project can be found [here](https://docs.google
 - [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
 	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
 		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
-	- [ ] Change product buttons for store owners to not buy their own products and instead be able to remove them and update the price or something 
-
 
 
