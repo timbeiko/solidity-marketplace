@@ -2,10 +2,8 @@ var Ownable = artifacts.require("./zeppelin/ownership/Ownable.sol");
 var Destructible = artifacts.require("./zeppelin/lifecycle/Destructible.sol");
 var Marketplace = artifacts.require("./Marketplace.sol");
 var Stores = artifacts.require("./Stores.sol");
-var Adoption = artifacts.require("./Adoption.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Adoption);
   deployer.deploy(Ownable);
   deployer.link(Ownable, Destructible);
   deployer.deploy(Destructible);
