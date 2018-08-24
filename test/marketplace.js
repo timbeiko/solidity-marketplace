@@ -101,24 +101,4 @@ contract('Marketplace', function(accounts) {
       assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), true);
     });
   });
-
-  it("removeStoreOwnersFromRequestList should remove approved store owners from the list ", function() {
-    return Marketplace.deployed().then(function(instance) {
-      marketplaceInstance = instance; 
-      admin = accounts[0]; 
-      marketplaceInstance.requestStoreOwnerStatus({from: accounts[1]});
-    }).then(function() {
-      marketplaceInstance.requestStoreOwnerStatus({from: accounts[2]});
-    }).then(function() {
-      marketplaceInstance.requestStoreOwnerStatus({from: accounts[3]});
-    }).then(function() {
-      marketplaceInstance.approveStoreOwnerStatus(accounts[2], {from: admin});
-    }).then(function() {
-      marketplaceInstance.removeStoreOwnersFromRequestList({from: admin});
-    }).then(function() {
-      assert(marketplaceInstance.getRequestedStoreOwnersLength(), 2);
-      assert(marketplaceInstance.getRequestedStoreOwner(0), accounts[1]);
-      assert(marketplaceInstance.getRequestedStoreOwner(1), accounts[3]);
-    });
-  });
 });

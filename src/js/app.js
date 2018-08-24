@@ -136,7 +136,6 @@ App = {
     App.removeStoreOwnerStatus();
     App.addAdmin();
     App.removeAdmin();
-    $(document).on('click', '.btn-clear-list', App.removeStoreOwnersFromRequestList);
     return App.requesterListView();
   },
 
@@ -284,24 +283,6 @@ App = {
         return MarketplaceInstance.approveStoreOwnerStatus(requesterAddr, {from: account});
       }).then(function() {
         $(event.target).text('Approved!').attr('disabled', true);
-      })
-    });
-  },
-
-  removeStoreOwnersFromRequestList: function(event) {
-    var MarketplaceInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-      var account = accounts[0];
-
-      App.contracts.Marketplace.deployed().then(function(instance) {
-        MarketplaceInstance = instance;
-        return MarketplaceInstance.removeStoreOwnersFromRequestList({from: account});
-      }).then(function() {
-        $(event.target).text('Done!').attr('disabled', true);
       })
     });
   },

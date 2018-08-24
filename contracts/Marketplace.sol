@@ -72,21 +72,4 @@ contract Marketplace is Ownable, Destructible {
 	function checkStoreOwnerStatus(address storeOwner) constant public returns (bool) {
 		return storeOwners[storeOwner];
 	}
-
-	// Need to update this --- not working for a bunch of reasons:
-	// 1. Validate if after setting things to 0x0, it will still push store owners to that spot 
-	// 2. Make sure to track the count better (i.e. subtract if requester[i] == 0x0), like in Stores.sol
-	function removeStoreOwnersFromRequestList() onlyAdmin public {
-		uint emptySpots = 0; 
-		uint requestLength = requestedStoreOwners.length;
-		for(uint i=0; i<requestLength; i++) {
-			if (checkStoreOwnerStatus(requestedStoreOwners[i]))
-				requestedStoreOwners[i] = requestedStoreOwners[requestLength-1-emptySpots];
-				emptySpots += 1; 
-		}
-
-		for(i=0; i<emptySpots; i++) {
-			delete requestedStoreOwners[requestLength-1-i];
-		}
-	}
 }
