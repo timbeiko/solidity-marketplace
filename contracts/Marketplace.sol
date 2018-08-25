@@ -64,7 +64,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 
 	/** @dev Checks if address is an administrator. 
 	* @param admin Address to remove as administrator 
-	* @returns True if address is admin. False otherwise. 
+	* @return True if address is admin. False otherwise. 
 	*/ 
 	function checkAdmin(address admin) 
 	constant 
@@ -86,7 +86,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	* Because there is no way to clear the array as of now, 
 	* the length will include requesters who have already been approved.
 	* 
-	* @returns Length of the requestedStoreOwners
+	* @return Length of the requestedStoreOwners
 	*/ 
 	function getRequestedStoreOwnersLength() 
 	constant 
@@ -98,7 +98,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the address at position index in requestedStoreOwners
 	* @param index Position in requestedStoreOwners
-	* @returns Address at position index in requestedStoreOwners
+	* @return Address at position index in requestedStoreOwners
 	*/ 
 	function getRequestedStoreOwner(uint index) 
 	constant 
@@ -119,7 +119,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	}
 
 	/** @dev Removes an address its storeowner status
-	* @param requester The address to remove as a storeowner 
+	* @param storeOwner The address to remove as a storeowner 
 	*/ 	
 	function removeStoreOwnerStatus(address storeOwner) 
 	onlyAdmin 
@@ -130,8 +130,8 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	}
  
 	/** @dev Checks if an address has storeowner status
-	* @param Address for which to check the status 
-	* @returns True if the address is a storeowner. False otherwise.
+	* @param storeOwner for which to check the status 
+	* @return True if the address is a storeowner. False otherwise.
 	*/ 	
 	function checkStoreOwnerStatus(address storeOwner) 
 	constant 

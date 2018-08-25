@@ -119,7 +119,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	}
 
 	/** @dev Returns the entire balance held by the contract. 
-	* @returns Balance held by the contract
+	* @return Balance held by the contract
 	*/
 	function getBalance() 
 	constant
@@ -129,7 +129,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	}
 
 	/** @dev Returns the number of storefronts (including deleted ones)
-	* @returns The number of storefronts that were created. 
+	* @return The number of storefronts that were created. 
 	*/
 	function getTotalStorefrontsCount() 
 	constant 
@@ -141,7 +141,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	/** @dev Creates a new storefront. 
 	* Uses msg.sender, the storefront name and `now` to generate storefront id. 
 	* @param name Storefront name 
-	* @returns s.id Storefront id 
+	* @return s.id Storefront id 
 	*/ 
 	function createStorefront(string name) 
 	onlyStoreOwner 
@@ -225,7 +225,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the number of storefronts (including removed ones) associated to a specific owner. 
 	* @param owner Address for which to return the number of owned storefronts 
-	* @returns The number of storefronts associated to this address (including removed ones) 
+	* @return The number of storefronts associated to this address (including removed ones) 
 	*/ 
 	function getStorefrontCount(address owner) 
 	constant 
@@ -236,7 +236,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the ID of a storefront at a specific index 
 	* @param storefrontIndex Index in storefronts for which to return the ID
-	* @returns storefrontId ID of storefront at specified index 
+	* @return storefrontId ID of storefront at specified index 
 	*/
 	function getStorefrontId(uint storefrontIndex) 
 	constant 
@@ -247,7 +247,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the address of a storefront's owner 
 	* @param storefrontId ID for which to return the owner 
-	* @returns address Address of the owner of the storefront  
+	* @return address Address of the owner of the storefront  
 	*/
 	function getStorefrontOwner(bytes32 storefrontId) 
 	constant 
@@ -259,7 +259,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	/** @dev Returns the ID of an owner's storefront at a specific index 
 	* @param owner Address ofthe storefront owner 
 	* @param storefrontIndex Index in owner's storefronts for which to return the ID
-	* @returns storefrontId ID of storefront at specified index in owner's storefronts
+	* @return storefrontId ID of storefront at specified index in owner's storefronts
 	*/
 	function getStorefrontsId(address owner, uint storefrontIndex) 
 	constant 
@@ -270,7 +270,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the name of a storefront
 	* @param storefrontId ID for which to return the name 
-	* @returns Name of the storefront 
+	* @return Name of the storefront 
 	*/
 	function getStorefrontName(bytes32 storefrontId) 
 	constant 
@@ -281,7 +281,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the balance of a storefront
 	* @param storefrontId ID for which to return the name 
-	* @returns Storefront's balance 
+	* @return Storefront's balance 
 	*/
 	function getStorefrontBalance(bytes32 storefrontId) 
 	constant 
@@ -296,7 +296,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @param description Description of Product 
 	* @param price Price of Product 
 	* @param qty Quantity of Product 
-	* @returns id ID of Product 
+	* @return id ID of Product 
 	*/
 	function addProduct(bytes32 storefrontId, string name, string description, uint price, uint qty) 
 	public 
@@ -328,7 +328,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the price of a product
 	* @param productId ID for which to return the price 
-	* @returns Price of the product 
+	* @return Price of the product 
 	*/
 	function getProductPrice(bytes32 productId) 
 	constant 
@@ -339,7 +339,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the name of a product
 	* @param productId ID for which to return the name 
-	* @returns Name of the product 
+	* @return Name of the product 
 	*/
 	function getProductName(bytes32 productId) 
 	constant 
@@ -350,11 +350,11 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns all information about a product 
 	* @param productId ID of product for which to return information 
-	* @returns name Name of Product 
-	* @returns desc Description of Product 
-	* @returns price Price of Product 
-	* @returns qty Quantity of Product 
-	* @returns storefrontId ID of storefront associated with Product 
+	* @return name Name of Product 
+	* @return desc Description of Product 
+	* @return price Price of Product 
+	* @return qty Quantity of Product 
+	* @return storefrontId ID of storefront associated with Product 
 	*/
 	function getProduct(bytes32 productId)
 	constant 
@@ -391,7 +391,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	/** @dev Returns the number of products (including removed ones) associated to a specific storefront. 
 	* @param storefrontId Storefront ID for which to return the number of products 
-	* @returns The number of products associated to this storefront (including removed ones) 
+	* @return The number of products associated to this storefront (including removed ones) 
 	*/ 
 	function getProductCount(bytes32 storefrontId) 
 	constant 
@@ -403,7 +403,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	/** @dev Returns the ID of an storefront's product at a specific index 
 	* @param storefrontId ID of the storefront from which to return a product 
 	* @param productIndex Index in storefront's products for which to return the ID
-	* @returns productId ID of product at specified index in storefront's products
+	* @return productId ID of product at specified index in storefront's products
 	*/
 	function getProductId(bytes32 storefrontId, uint productIndex) 
 	constant
@@ -416,7 +416,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @param storefrontId ID of storefront from which to purchase product 
 	* @param productId ID of product to purchase 
 	* @param qty Quantity of product to purchase 
-	* @returns True if purchase was executed successfully. 
+	* @return True if purchase was executed successfully. 
 	*/ 
 	function purchaseProduct(bytes32 storefrontId, bytes32 productId, uint qty) 
 	payable 
