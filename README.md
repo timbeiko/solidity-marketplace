@@ -1,6 +1,7 @@
-# Solidity Marketplace (ConsenSys Developer Course Final Project)
+# Solidity Marketplace 
 
-This repository contains the implementation of a marketplace in Solidity. It is the final project for the ConsenSys Developer Bootcamp. 
+This repository contains the implementation of a marketplace in Solidity. 
+It is the final project for the ConsenSys Developer Bootcamp. 
 
 *** 
 
