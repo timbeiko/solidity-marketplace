@@ -6,19 +6,29 @@ import "../installed_contracts/zeppelin/contracts/lifecycle/Pausable.sol";
 import './Marketplace.sol';
 
 /*
-* Store 
+* @title Store 
 *
-* This is the main contract for the Store implementation.
+* @dev This contract allows storeowners to manage their storefront and purchasers to buy products.
+* The Ownable, Destructible and Pausable contracts are all taken from Zeppelin.
 */
 contract Stores is Ownable, Destructible, Pausable {
 	address public marketplaceId; 
 	Marketplace public marketplaceInstance; 
 
+	/** @dev Constructor. Links with Marketplace contract
+	* @param marketplaceContract Address of Marketplace contract to link
+	*/
 	constructor(address marketplaceContract) public {
 		marketplaceInstance = Marketplace(marketplaceContract);
 		marketplaceId = marketplaceContract; 
 	}
 
+	/** @dev Struct that stores Storeront data 
+	* @param id Storefront id 
+	* @param name Storefront name 
+	* @param owner Address of owner of storefront 
+	* @param balance Storefront balance 
+	*/
 	struct Storefront {
 		bytes32 id; 
 		string name;
@@ -26,6 +36,14 @@ contract Stores is Ownable, Destructible, Pausable {
 		uint balance; 
 	}
 
+	/** @dev Struct that stores Product data 
+	* @param id Product id 
+	* @param name Product name 
+	* @param description Product description
+	* @param price Product price 
+	* @param qty Product quantity  
+	* @param storefrontId Id of storefront in which product belongs 
+	*/	
 	struct Product {
 		bytes32 id; 
 		string name; 
@@ -35,14 +53,14 @@ contract Stores is Ownable, Destructible, Pausable {
 		bytes32 storefrontId; 
 	}
 
+	// Events emmited by the contract 
 	event StorefrontCreated (
 		bytes32 id, 
 		string name, 
 		address owner, 
 		uint totalStores);
 
-	event StorefrontRemoved (
-		bytes32 id);
+	event StorefrontRemoved (bytes32 id);
 
 	event BalanceWithdrawn (
 		bytes32 storefrontId,
@@ -74,22 +92,35 @@ contract Stores is Ownable, Destructible, Pausable {
 		address buyer,
 		uint newQuantity);
 
+
+	// List of all storefronts 
 	bytes32[] public storefronts;
+	// Mapping between storefront owners and the IDs of their storefronts 
 	mapping (address => bytes32[]) public storefrontsByOwner; 
+	// Mapping between storefront IDs and their struct 
 	mapping (bytes32 => Storefront) public storefrontById;
+	// Mapping between storefronts  and the IDs of their products 
 	mapping (bytes32 => bytes32[]) public inventories; 
+	// Mapping between product IDs and their struct 
 	mapping (bytes32 => Product) public productById;
 
+	// @dev Checks if msg.sender is has storeowner status
 	modifier onlyStoreOwner() {
 		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
 			_;
 	}
 
+	/** @dev Checks if msg.sender is the owner of a specific storefront 
+	* @param id Storefront id for which to check if msg.sender is the owner
+	*/
 	modifier onlyStorefrontOwner(bytes32 id) {
 		if (storefrontById[id].owner == msg.sender)
 			_; 
 	}
 
+	/** @dev Returns the entire balance held by the contract. 
+	* @returns Balance held by the contract
+	*/
 	function getBalance() 
 	constant
 	public 
@@ -97,6 +128,21 @@ contract Stores is Ownable, Destructible, Pausable {
 		return address(this).balance;
 	}
 
+	/** @dev Returns the number of storefronts (including deleted ones)
+	* @returns The number of storefronts that were created. 
+	*/
+	function getTotalStorefrontsCount() 
+	constant 
+	public 
+	returns (uint) {
+		return storefronts.length;
+	}
+
+	/** @dev Creates a new storefront. 
+	* Uses msg.sender, the storefront name and `now` to generate storefront id. 
+	* @param name Storefront name 
+	* @returns s.id Storefront id 
+	*/ 
 	function createStorefront(string name) 
 	onlyStoreOwner 
 	whenNotPaused
@@ -111,6 +157,12 @@ contract Stores is Ownable, Destructible, Pausable {
 		return s.id; 
 	}
 
+	/** @dev Removes a storefront.
+	* First removes all its products, 
+	* then removes it from mapping and arrays and 
+	* finally, sends balance to owner.
+	* @param id Storefront id to remove 
+	*/ 
 	function removeStorefront(bytes32 id) 
 	onlyStorefrontOwner(id) 
 	whenNotPaused
@@ -156,6 +208,9 @@ contract Stores is Ownable, Destructible, Pausable {
 		emit StorefrontRemoved(id);
 	}
 
+	/** @dev Transfers the balance of a storefront to its owner
+	* @param storefrontId ID of storefront from which to withdraw balance 
+	*/
 	function withdrawStorefrontBalance(bytes32 storefrontId) 
 	onlyStorefrontOwner(storefrontId)
 	whenNotPaused
@@ -168,13 +223,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		}
 	}
 
-	function getTotalStorefrontsCount() 
-	constant 
-	public 
-	returns (uint) {
-		return storefronts.length;
-	}
-
+	/** @dev Returns the number of storefronts (including removed ones) associated to a specific owner. 
+	* @param owner Address for which to return the number of owned storefronts 
+	* @returns The number of storefronts associated to this address (including removed ones) 
+	*/ 
 	function getStorefrontCount(address owner) 
 	constant 
 	public 
@@ -182,6 +234,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		return storefrontsByOwner[owner].length;
 	}
 
+	/** @dev Returns the ID of a storefront at a specific index 
+	* @param storefrontIndex Index in storefronts for which to return the ID
+	* @returns storefrontId ID of storefront at specified index 
+	*/
 	function getStorefrontId(uint storefrontIndex) 
 	constant 
 	public
@@ -189,6 +245,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		return storefronts[storefrontIndex];
 	}
 
+	/** @dev Returns the address of a storefront's owner 
+	* @param storefrontId ID for which to return the owner 
+	* @returns address Address of the owner of the storefront  
+	*/
 	function getStorefrontOwner(bytes32 storefrontId) 
 	constant 
 	public 
@@ -196,6 +256,11 @@ contract Stores is Ownable, Destructible, Pausable {
 		return storefrontById[storefrontId].owner;
 	}
 
+	/** @dev Returns the ID of an owner's storefront at a specific index 
+	* @param owner Address ofthe storefront owner 
+	* @param storefrontIndex Index in owner's storefronts for which to return the ID
+	* @returns storefrontId ID of storefront at specified index in owner's storefronts
+	*/
 	function getStorefrontsId(address owner, uint storefrontIndex) 
 	constant 
 	public 
@@ -203,6 +268,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		return storefrontsByOwner[owner][storefrontIndex];
 	}
 
+	/** @dev Returns the name of a storefront
+	* @param storefrontId ID for which to return the name 
+	* @returns Name of the storefront 
+	*/
 	function getStorefrontName(bytes32 storefrontId) 
 	constant 
 	public 
@@ -210,6 +279,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		return storefrontById[storefrontId].name;
 	}
 
+	/** @dev Returns the balance of a storefront
+	* @param storefrontId ID for which to return the name 
+	* @returns Storefront's balance 
+	*/
 	function getStorefrontBalance(bytes32 storefrontId) 
 	constant 
 	public 
@@ -217,6 +290,14 @@ contract Stores is Ownable, Destructible, Pausable {
 		return storefrontById[storefrontId].balance;
 	}
 
+	/** @dev Adds a product to a storefront
+	* @param storefrontId ID of storefront to add the product to 
+	* @param name Name of Product 
+	* @param description Description of Product 
+	* @param price Price of Product 
+	* @param qty Quantity of Product 
+	* @returns id ID of Product 
+	*/
 	function addProduct(bytes32 storefrontId, string name, string description, uint price, uint qty) 
 	public 
 	onlyStorefrontOwner(storefrontId) 
@@ -230,6 +311,11 @@ contract Stores is Ownable, Destructible, Pausable {
 		return p.id; 
 	}
 
+	/** @dev Updates the price of a product 
+	* @param storefrontId ID of storefront associated with product
+	* @param productId ID of product for which to update price 
+	* @param newPrice new price to set to product 
+	*/ 
 	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) 
 	onlyStorefrontOwner(storefrontId) 
 	whenNotPaused
@@ -240,6 +326,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		emit PriceUpdated(productId, oldPrice, newPrice);
 	}
 
+	/** @dev Returns the price of a product
+	* @param productId ID for which to return the price 
+	* @returns Price of the product 
+	*/
 	function getProductPrice(bytes32 productId) 
 	constant 
 	public 
@@ -247,6 +337,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		return productById[productId].price;
 	}
 
+	/** @dev Returns the name of a product
+	* @param productId ID for which to return the name 
+	* @returns Name of the product 
+	*/
 	function getProductName(bytes32 productId) 
 	constant 
 	public 
@@ -254,7 +348,14 @@ contract Stores is Ownable, Destructible, Pausable {
 		return productById[productId].name;
 	}
 
-
+	/** @dev Returns all information about a product 
+	* @param productId ID of product for which to return information 
+	* @returns name Name of Product 
+	* @returns desc Description of Product 
+	* @returns price Price of Product 
+	* @returns qty Quantity of Product 
+	* @returns storefrontId ID of storefront associated with Product 
+	*/
 	function getProduct(bytes32 productId)
 	constant 
 	public
@@ -266,6 +367,10 @@ contract Stores is Ownable, Destructible, Pausable {
 				productById[productId].storefrontId);
 	}
 
+	/** @dev Removes a product.
+	* @param storefrontId Storefront ID for product to remove 
+	* @param productId ID of product to remove 
+	*/ 
 	function removeProduct(bytes32 storefrontId, bytes32 productId) 
 	onlyStorefrontOwner(storefrontId) 
 	whenNotPaused
@@ -284,6 +389,10 @@ contract Stores is Ownable, Destructible, Pausable {
 		}
 	}
 
+	/** @dev Returns the number of products (including removed ones) associated to a specific storefront. 
+	* @param storefrontId Storefront ID for which to return the number of products 
+	* @returns The number of products associated to this storefront (including removed ones) 
+	*/ 
 	function getProductCount(bytes32 storefrontId) 
 	constant 
 	public 
@@ -291,6 +400,11 @@ contract Stores is Ownable, Destructible, Pausable {
 		return inventories[storefrontId].length;
 	}
 
+	/** @dev Returns the ID of an storefront's product at a specific index 
+	* @param storefrontId ID of the storefront from which to return a product 
+	* @param productIndex Index in storefront's products for which to return the ID
+	* @returns productId ID of product at specified index in storefront's products
+	*/
 	function getProductId(bytes32 storefrontId, uint productIndex) 
 	constant
 	public 
@@ -298,6 +412,12 @@ contract Stores is Ownable, Destructible, Pausable {
 		return bytes32(inventories[storefrontId][productIndex]); 
 	}
 
+	/** @dev Handles the purchase of a product 
+	* @param storefrontId ID of storefront from which to purchase product 
+	* @param productId ID of product to purchase 
+	* @param qty Quantity of product to purchase 
+	* @returns True if purchase was executed successfully. 
+	*/ 
 	function purchaseProduct(bytes32 storefrontId, bytes32 productId, uint qty) 
 	payable 
 	whenNotPaused

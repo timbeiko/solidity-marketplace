@@ -82,7 +82,8 @@ To see how to test the project for the required functionality, see `user_stories
 ## Other
 - [x] Use a library (via EthPM)
 	- The `zeppelin` library is used (installed under `/installed_contracts/zeppelin`)
-- [ ] [TODO] "Smart Contract code should be commented according to the specs in [the documentation](https://solidity.readthedocs.io/en/v0.4.21/layout-of-source-files.html#comments)
+- [x] Smart Contract code should be commented according to the specs in [the documentation](https://solidity.readthedocs.io/en/v0.4.21/layout-of-source-files.html#comments)
+	- See `Marketplace.sol` and `Stores.sol` 
 
 ## [TODO] Stretch Requirement
 - [ ] Deploy on a test net 
