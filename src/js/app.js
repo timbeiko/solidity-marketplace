@@ -44,6 +44,7 @@ App = {
       }
 
       var account = accounts[0];
+      $('#currentAddress').text(account);
 
       App.contracts.Marketplace.deployed().then(function(instance) {
         MarketplaceInstance = instance;

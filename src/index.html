@@ -19,8 +19,9 @@
   </head>
   <body>
     <nav class="navbar navbar-default">
-      <button class="btn navbar-btn btn-request-store" type="button" data-addr="0x0" style="display: none;"> <b> Request to be a store owner </b></button>
       <h4 class="navbar-text">Current Address: <span id="currentAddress">0x0</span></h4>
+
+      <button class="btn navbar-btn btn-primary btn-request-store" type="button" data-addr="0x0" style="display: none;"> <b> Request to be a store owner </b></button>
     </nav>
 
     <div class="container">
@@ -86,7 +87,7 @@
               <p>
                 <form id="createStorefront">
                   <input id="storefrontName" type="text">
-                  <input class="btn btn-default btn-create-storefront" type="submit" value="Create">
+                  <input class="btn btn-primary btn-create-storefront" type="submit" value="Create">
                 </form>
               </p>
             </div>
@@ -103,7 +104,7 @@
 
                 <form class="wf">
                   <input type="hidden" id="storefrontId" name="ID" value="0x">
-                  <input class="btn btn-default btn-withdraw" type="button" value="Withdraw balance">
+                  <input class="btn btn-primary btn-withdraw" type="button" value="Withdraw balance">
                 </form>
               </div>
             </div>
@@ -114,7 +115,7 @@
               <p>
                 <form id="deleteStorefront">
                   <input id="storefrontId" type="text">
-                  <input class="btn btn-default btn-delete-storefront" type="submit" value="Delete">
+                  <input class="btn btn-danger btn-delete-storefront" type="submit" value="Delete">
                 </form>
               </p>
             </div>

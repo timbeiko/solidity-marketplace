@@ -97,8 +97,3 @@ To see how to test the project for the required functionality, see `user_stories
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
-*** 
-
-# TODO 
-- [ ] Display Address in navbar 
-

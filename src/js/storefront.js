@@ -64,6 +64,8 @@ App = {
       }
 
       var account = accounts[0];
+      $('#currentAddress').text(account);
+
       let StoresInstance = await App.contracts.Stores.deployed();
       let storefrontOwnerAddress = await StoresInstance.getStorefrontOwner(App.storefrontID);
 
