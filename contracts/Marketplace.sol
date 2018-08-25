@@ -5,31 +5,43 @@ import "../installed_contracts/zeppelin/contracts/lifecycle/Destructible.sol";
 import "../installed_contracts/zeppelin/contracts/lifecycle/Pausable.sol";
 
 /*
-* Marketplace 
+* @title Marketplace 
 *
-* This is the main contract for the Marketplace implementation.
+* @dev This contract allows the addition and removal of admins and storefront owners 
+* The Ownable, Destructible and Pausable contracts are all taken from Zeppelin
 */
 contract Marketplace is Ownable, Destructible, Pausable {
+
+	/** @dev Account that deploys contract is made admin.
+	*/
 	constructor() public {
 		administrators[msg.sender] = true;
 	}
 
+	/** @dev the mappings store current administrators and storeowners
+	* @dev The array stores address of to-be-approved storeowners. 
+	* There is currently no way to clear/reset the requestedStoreOwners. 
+	*/
 	mapping (address => bool) public administrators; 
-	address[] requestedStoreOwners;
 	mapping (address => bool) public storeOwners;
+	address[] requestedStoreOwners;
 
+	// Events emmited by the contract 
 	event AdminAdded (address adminAddress);
 	event AdminRemoved (address removedAddress);
 	event StoreOwnerRequest (address requester);
 	event StoreOwnerAdded (address storeOwnerAddress);
 	event StoreOwnerRemoved (address storeOwnerAddress);
 
+	// @dev modifier to restrict function calls to administrators
 	modifier onlyAdmin() {
 		if (administrators[msg.sender] == true)
 			_;
 	}
 
-	// This function should maybe be set to onlyOwner as well... 
+	/** @dev Adds an administrator. Admins can add more administrators.
+	* @param admin Address to add as administrator 
+	*/ 
 	function addAdmin(address admin) 
 	onlyAdmin 
 	whenNotPaused
@@ -38,7 +50,9 @@ contract Marketplace is Ownable, Destructible, Pausable {
 		emit AdminAdded(admin);
 	}
 
-	// There should maybe be an "owner UI", but perhaps that's overkill...
+	/** @dev Removes an administrator. Only owners can remove administrators.
+	* @param admin Address to remove as administrator 
+	*/
 	function removeAdmin(address admin) 
 	onlyOwner
 	whenNotPaused
@@ -48,6 +62,10 @@ contract Marketplace is Ownable, Destructible, Pausable {
 			emit AdminRemoved(admin);
 	}
 
+	/** @dev Checks if address is an administrator. 
+	* @param admin Address to remove as administrator 
+	* @returns True if address is admin. False otherwise. 
+	*/ 
 	function checkAdmin(address admin) 
 	constant 
 	public 
@@ -55,6 +73,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 		return administrators[admin];
 	}
 
+	// @dev Adds msg.sender to requestedStoreOwners array
 	function requestStoreOwnerStatus() 
 	whenNotPaused
 	public {
@@ -63,6 +82,12 @@ contract Marketplace is Ownable, Destructible, Pausable {
 			emit StoreOwnerRequest(msg.sender);
 	}
 
+	/** @dev Returns the length of the requestedStoreOwners array. 
+	* Because there is no way to clear the array as of now, 
+	* the length will include requesters who have already been approved.
+	* 
+	* @returns Length of the requestedStoreOwners
+	*/ 
 	function getRequestedStoreOwnersLength() 
 	constant 
 	public 
@@ -70,13 +95,21 @@ contract Marketplace is Ownable, Destructible, Pausable {
 		return requestedStoreOwners.length;
 	}
 
-	function getRequestedStoreOwner(uint id) 
+
+	/** @dev Returns the address at position index in requestedStoreOwners
+	* @param index Position in requestedStoreOwners
+	* @returns Address at position index in requestedStoreOwners
+	*/ 
+	function getRequestedStoreOwner(uint index) 
 	constant 
 	public 
 	returns (address) {
-		return requestedStoreOwners[id];
+		return requestedStoreOwners[index];
 	} 
 
+	/** @dev Marks an address as a storeowner 
+	* @param requester The address to add as a storeowner 
+	*/ 
 	function approveStoreOwnerStatus(address requester) 
 	onlyAdmin 
 	whenNotPaused
@@ -85,6 +118,9 @@ contract Marketplace is Ownable, Destructible, Pausable {
 		emit StoreOwnerAdded(requester);
 	}
 
+	/** @dev Removes an address its storeowner status
+	* @param requester The address to remove as a storeowner 
+	*/ 	
 	function removeStoreOwnerStatus(address storeOwner) 
 	onlyAdmin 
 	whenNotPaused
@@ -93,6 +129,10 @@ contract Marketplace is Ownable, Destructible, Pausable {
 		emit StoreOwnerRemoved(storeOwner);
 	}
  
+	/** @dev Checks if an address has storeowner status
+	* @param Address for which to check the status 
+	* @returns True if the address is a storeowner. False otherwise.
+	*/ 	
 	function checkStoreOwnerStatus(address storeOwner) 
 	constant 
 	public 
