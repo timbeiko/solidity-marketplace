@@ -4,4 +4,4 @@ build/contracts/*
 logs	
 *.log	
 
-.secret
+secret.js
