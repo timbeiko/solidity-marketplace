@@ -106,16 +106,16 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	// @dev Checks if msg.sender is has storeowner status
 	modifier onlyStoreOwner() {
-		if (marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true)
-			_;
+		require(marketplaceInstance.checkStoreOwnerStatus(msg.sender) == true);
+		_;
 	}
 
 	/** @dev Checks if msg.sender is the owner of a specific storefront 
 	* @param id Storefront id for which to check if msg.sender is the owner
 	*/
 	modifier onlyStorefrontOwner(bytes32 id) {
-		if (storefrontById[id].owner == msg.sender)
-			_; 
+		require(storefrontById[id].owner == msg.sender);
+		_; 
 	}
 
 	/** @dev Returns the entire balance held by the contract. 
@@ -215,12 +215,11 @@ contract Stores is Ownable, Destructible, Pausable {
 	onlyStorefrontOwner(storefrontId)
 	whenNotPaused
 	public {
+		require(storefrontById[storefrontId].balance > 0);
 		uint storefrontBalance = storefrontById[storefrontId].balance;
-		if (storefrontBalance > 0) {
-			msg.sender.transfer(storefrontBalance);
-			emit BalanceWithdrawn(storefrontId, storefrontBalance);
-			storefrontById[storefrontId].balance = 0;
-		}
+		msg.sender.transfer(storefrontBalance);
+		emit BalanceWithdrawn(storefrontId, storefrontBalance);
+		storefrontById[storefrontId].balance = 0;
 	}
 
 	/** @dev Returns the number of storefronts (including removed ones) associated to a specific owner. 

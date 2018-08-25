@@ -43,13 +43,10 @@ contract('Marketplace', function(accounts) {
   		owner = accounts[0];
   		return marketplaceInstance.addAdmin(accounts[1], {from: owner});
   	}).then(function() {
-  		// accounts[1] should be an admin
   		assert(marketplaceInstance.checkAdmin(accounts[1]), true);
   	}).then(function() {
-  		// Remove accounts[1] as an admin
   		return marketplaceInstance.removeAdmin(accounts[1], {from: owner});
   	}).then(function() {
-  		// accounts[1] should no longer be an admin
   		assert(marketplaceInstance.checkAdmin(accounts[1]), false);
   	});
   });
@@ -69,39 +66,43 @@ contract('Marketplace', function(accounts) {
   it("Should allow admins to approve store owners", function() {
     return Marketplace.deployed().then(function(instance) {
       marketplaceInstance = instance; 
-      admin = accounts[0]; // made admin by deploying the contract 
+      admin = accounts[0]; 
       marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
       assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), true);
     });
   });
 
-  it("Should *not* allow non-admins to approve store owners", function() {
-    return Marketplace.deployed().then(function(instance) {
-      marketplaceInstance = instance; 
-      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: accounts[2]}); 
-      assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), false);
-    });
+  it("Should *not* allow non-admins to approve store owners", async () => {
+    let marketplaceInstance = await Marketplace.deployed();
+    try {
+      await marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: accounts[2]}); 
+      assert.fail('Should have reverted before');
+    } catch(error) {
+      assert.equal(error.message, "VM Exception while processing transaction: revert");
+    }
   });
 
   it("Should allow admins to remove store owners", function() {
     return Marketplace.deployed().then(function(instance) {
       marketplaceInstance = instance;
-      admin = accounts[0]; // made admin by deploying the contract 
+      admin = accounts[0]; 
       marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
       marketplaceInstance.removeStoreOwnerStatus(accounts[1], {from: admin});
       assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), false);
     });
   });
 
-  it("Should *not* allow non-admins to remove store owners", function() {
-    return Marketplace.deployed().then(function(instance) {
-      marketplaceInstance = instance;
-      admin = accounts[0]; // made admin by deploying the contract 
-      nonAdmin = accounts[2];
-      marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
-      marketplaceInstance.removeStoreOwnerStatus(accounts[1], {from: nonAdmin});
-      assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), true);
-    });
+  it("Should *not* allow non-admins to remove store owners", async () => {
+    let marketplaceInstance = await Marketplace.deployed();
+    admin = accounts[0]; 
+    nonAdmin = accounts[2];
+    await marketplaceInstance.approveStoreOwnerStatus(accounts[1], {from: admin});
+    try {
+      await marketplaceInstance.removeStoreOwnerStatus(accounts[1], {from: nonAdmin});
+      assert.fail('Should have reverted before');
+    } catch(error) {
+      assert.equal(error.message, "VM Exception while processing transaction: revert");
+    }
   });
 
   it("Should allow owners to pause the contract", async () => {

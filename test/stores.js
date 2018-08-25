@@ -47,9 +47,12 @@ contract('Stores', async (accounts) => {
 	it("Should *not* allow non-store owners to create a storefront", async() => {
 		let marketplace = await Marketplace.new();
 		let stores = await Stores.new(marketplace.address);
-		await stores.createStorefront("Test store 1", {from: accounts[2]});
-		let storeCount = await stores.getStorefrontCount(accounts[2]);
-		assert.equal(storeCount, 0);
+    try {
+		  await stores.createStorefront("Test store 1", {from: accounts[2]});
+      assert.fail('Should have reverted before');
+    } catch(error) {
+      assert.equal(error.message, "VM Exception while processing transaction: revert");
+    }
 	});
 
 	it("Should allow storefront owners to remove a storefront", async() => {
@@ -115,9 +118,12 @@ contract('Stores', async (accounts) => {
 
 		let notOwner = accounts[2];
 		let storeFrontId = await stores.getStorefrontsId(storeOwner, 0); 
-		await stores.removeStorefront(storeFrontId, {from: notOwner}); 
-		storeCount = await stores.getStorefrontCount(storeOwner);
-		assert.equal(storeCount, 1);
+    try {
+		  await stores.removeStorefront(storeFrontId, {from: notOwner}); 
+      assert.fail('Should have reverted before');
+    } catch(error) {
+      assert.equal(error.message, "VM Exception while processing transaction: revert");
+    }
 	});
 
 	it("Should allow a storefront owner to add a product to their storefront", async() => {
@@ -371,12 +377,12 @@ contract('Stores', async (accounts) => {
 	    let storeOwner = accounts[1];
 	    await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 	    await stores.pause({from: accounts[0]})
-	      try {
-	        await stores.createStorefront("Storefront which should not be created", {from: storeOwner});
-	        assert.fail('Should have reverted before');
-	      } catch(error) {
-	        assert.equal(error.message, "VM Exception while processing transaction: revert");
-	      }
+      try {
+        await stores.createStorefront("Storefront which should not be created", {from: storeOwner});
+        assert.fail('Should have reverted before');
+      } catch(error) {
+        assert.equal(error.message, "VM Exception while processing transaction: revert");
+      }
 	});
 
 	it("Should allow owners to unpause the contract", async () => {

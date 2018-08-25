@@ -35,8 +35,8 @@ contract Marketplace is Ownable, Destructible, Pausable {
 
 	// @dev modifier to restrict function calls to administrators
 	modifier onlyAdmin() {
-		if (administrators[msg.sender] == true)
-			_;
+		require(administrators[msg.sender] == true);
+		_;
 	}
 
 	/** @dev Adds an administrator. Admins can add more administrators.
@@ -57,9 +57,9 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	onlyOwner
 	whenNotPaused
 	public {
-		if (administrators[admin] == true)
-			administrators[admin] = false;
-			emit AdminRemoved(admin);
+		require(administrators[admin] == true);
+		administrators[admin] = false;
+		emit AdminRemoved(admin);
 	}
 
 	/** @dev Checks if address is an administrator. 
@@ -77,9 +77,9 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	function requestStoreOwnerStatus() 
 	whenNotPaused
 	public {
-		if (storeOwners[msg.sender] == false)
-			requestedStoreOwners.push(msg.sender);
-			emit StoreOwnerRequest(msg.sender);
+		require(storeOwners[msg.sender] == false);
+		requestedStoreOwners.push(msg.sender);
+		emit StoreOwnerRequest(msg.sender);
 	}
 
 	/** @dev Returns the length of the requestedStoreOwners array. 

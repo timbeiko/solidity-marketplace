@@ -2,8 +2,21 @@
 See: https://courses.consensys.net/courses/course-v1:ConsenSysAcademy+2018DP+1/courseware/6ad0b7c56c8947a2b101cb916896fb9f/edd7e596883247cbb04e5145b3508467/?activate_block_id=block-v1%3AConsenSysAcademy%2B2018DP%2B1%2Btype%40sequential%2Bblock%40edd7e596883247cbb04e5145b3508467
 
 ## Fail early and fail loud
+Used `require` to trigger an error instead of `if` in the following modifiers and functions:
+
+#### Marketplace.sol 
+- onlyAdmin()
+- removeAdmin(address admin) 
+- requestStoreOwnerStatus() 
+
+#### Stores.sol 
+- onlyStoreOwner()
+- onlyStorefrontOwner(bytes32 id)
+- withdrawStorefrontBalance(bytes32 storefrontId) 
+- purchaseProduct(bytes32 storefrontId, bytes32 productId, uint qty) 
 
 ## Restricting Access
+The following modifiers 
 
 ## Pull over Push Payments
 
