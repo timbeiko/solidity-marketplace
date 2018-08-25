@@ -54,7 +54,7 @@ To see how to test the project for the required functionality, see `user_stories
 	- Once MetaMask is configured to the application network (`localhost:8545`), users can interact with it using MetaMask
 - [x] Contract state is updated
 	- [x] Update reflected in UI
-		- See `User Stories`. Updates require refreshing the page.  
+		- See `user_stories.md`. Updates require refreshing the page.  
  
 ## Test Requirements:
 - [x] Write 5 tests for each contract you wrote
@@ -92,3 +92,5 @@ To see how to test the project for the required functionality, see `user_stories
 ## Full Requirements Document 
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
+
+
