@@ -68,11 +68,10 @@ To see how to test the project for the required functionality, see `user_stories
 - [x] Tests run with truffle test
 	- Yes. See `Testing` under `Running the Project`
  
-## [TODO] Design Pattern Requirements (in design_pattern_desicions.md):
+## [TODO] Design Pattern Requirements:
 - [ ] Implement emergency stop
 - [ ] What other design patterns have you used / not used?
-	- [ ] Why did you choose the patterns that you did?
-	- [ ] Why not others?
+	- See `design_pattern_desicions.md`
  
 ## [TODO] Security Tools / Common Attacks (in avoiding_common_attacks.md):
 - [ ] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks

@@ -57,12 +57,21 @@ contract('Stores', async (accounts) => {
 		await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
 		await stores.createStorefront("Test store", {from: storeOwner});
 		let storeCount = await stores.getStorefrontCount(storeOwner);
-		assert.equal(storeCount, 1);
+		assert.equal(Number(storeCount), 1);
 
 		let storeFrontId = await stores.getStorefrontsId(storeOwner, 0); 
 		await stores.removeStorefront(storeFrontId, {from: storeOwner}); 
 		storeCount = await stores.getStorefrontCount(storeOwner);
-		assert.equal(storeCount, 0);
+
+		// Do not count stores with id=0x0
+		let finalCount = Number(storeCount);
+		for(let i=0; i<storeCount; i++) {
+			let id = await stores.getStorefrontsId(storeOwner, i);
+			if (id == 0x0000000000000000000000000000000000000000000000000000000000000000)
+				finalCount -= 1;
+		}
+
+		assert.equal(finalCount, 0);
 	});
 
 	it("Should withdraw the balance of a storefront upon if the storefront is removed", async() => {

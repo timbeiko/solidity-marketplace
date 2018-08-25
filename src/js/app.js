@@ -356,7 +356,8 @@ App = {
 
     for(i=0; i<length; i++) {
       let sf = await StoresInstance.getStorefrontsId(account, i);
-      storefronts.push(sf);
+      if (sf != 0x0000000000000000000000000000000000000000000000000000000000000000)
+        storefronts.push(sf);
     }
 
     // Remove duplicates, if any
