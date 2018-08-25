@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity 0.4.24;
 
 import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
 import "../installed_contracts/zeppelin/contracts/lifecycle/Destructible.sol";
@@ -22,9 +22,9 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	* @dev The array stores address of to-be-approved storeowners. 
 	* There is currently no way to clear/reset the requestedStoreOwners. 
 	*/
-	mapping (address => bool) public administrators; 
-	mapping (address => bool) public storeOwners;
-	address[] requestedStoreOwners;
+	mapping (address => bool) private administrators; 
+	mapping (address => bool) private storeOwners;
+	address[] private requestedStoreOwners;
 
 	// Events emmited by the contract 
 	event AdminAdded (address adminAddress);

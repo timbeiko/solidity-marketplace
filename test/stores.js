@@ -400,5 +400,24 @@ contract('Stores', async (accounts) => {
 	    let storeCount = await stores.getTotalStorefrontsCount();
 	    assert(storeCount, 1);
 	});
+
+	it("Should allow the owner to destroy the contract", async () => {
+	    let marketplace = await Marketplace.new();
+	    let stores = await Stores.new(marketplace.address);
+	  	await stores.destroy({from: accounts[0]});
+	    let code = await web3.eth.getCode(stores.address)
+	    assert.equal(code, "0x0");
+	});
+
+	it("Should *not* allow a non-owner to destroy the contract", async () => {
+	    let marketplace = await Marketplace.new();
+	    let stores = await Stores.new(marketplace.address);
+	    try {
+	      await stores.destroy({from: accounts[1]});
+	      assert.fail('Should have reverted before');
+	    } catch(error) {
+	      assert.equal(error.message, "VM Exception while processing transaction: revert");
+	    }
+	});
 });
 

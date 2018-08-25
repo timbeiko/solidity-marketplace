@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity 0.4.24;
 
 import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
 import "../installed_contracts/zeppelin/contracts/lifecycle/Destructible.sol";
@@ -94,15 +94,15 @@ contract Stores is Ownable, Destructible, Pausable {
 
 
 	// List of all storefronts 
-	bytes32[] public storefronts;
+	bytes32[] private storefronts;
 	// Mapping between storefront owners and the IDs of their storefronts 
-	mapping (address => bytes32[]) public storefrontsByOwner; 
+	mapping (address => bytes32[]) private storefrontsByOwner; 
 	// Mapping between storefront IDs and their struct 
-	mapping (bytes32 => Storefront) public storefrontById;
+	mapping (bytes32 => Storefront) private storefrontById;
 	// Mapping between storefronts  and the IDs of their products 
-	mapping (bytes32 => bytes32[]) public inventories; 
+	mapping (bytes32 => bytes32[]) private inventories; 
 	// Mapping between product IDs and their struct 
-	mapping (bytes32 => Product) public productById;
+	mapping (bytes32 => Product) private productById;
 
 	// @dev Checks if msg.sender is has storeowner status
 	modifier onlyStoreOwner() {

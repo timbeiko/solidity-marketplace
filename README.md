@@ -76,8 +76,9 @@ To see how to test the project for the required functionality, see `user_stories
 - [x] What other design patterns have you used / not used?
 	- See `design_pattern_desicions.md`
  
-## [TODO] Security Tools / Common Attacks (in avoiding_common_attacks.md):
-- [ ] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
+## Security Tools / Common Attacks :
+- [x] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
+	- See `avoiding_common_attacks.md`
 
 ## Other
 - [x] Use a library (via EthPM)

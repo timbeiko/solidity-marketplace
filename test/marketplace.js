@@ -115,12 +115,12 @@ contract('Marketplace', function(accounts) {
   it("Should not allow calling whenNotPaused functions if contract is paused", async () => {
     let MarketplaceInstance = await Marketplace.new();
     await MarketplaceInstance.pause({from: accounts[0]})
-      try {
-        await MarketplaceInstance.addAdmin(accounts[1], {from: accounts[0]});
-        assert.fail('Should have reverted before');
-      } catch(error) {
-        assert.equal(error.message, "VM Exception while processing transaction: revert");
-      }
+    try {
+      await MarketplaceInstance.addAdmin(accounts[1], {from: accounts[0]});
+      assert.fail('Should have reverted before');
+    } catch(error) {
+      assert.equal(error.message, "VM Exception while processing transaction: revert");
+    }
   });
 
   it("Should allow owners to unpause the contract", async () => {
@@ -133,5 +133,22 @@ contract('Marketplace', function(accounts) {
     assert(PausableInstance.paused, false);
 
     assert(marketplaceInstance.checkAdmin(accounts[1]), true);
+  });
+
+  it("Should allow the owner to destroy the contract", async () => {
+    let MarketplaceInstance = await Marketplace.new();
+    await MarketplaceInstance.destroy({from: accounts[0]});
+    let code = await web3.eth.getCode(MarketplaceInstance.address)
+    assert.equal(code, "0x0");
+  });
+
+  it("Should *not* allow a non-owner to destroy the contract", async () => {
+    let MarketplaceInstance = await Marketplace.new();
+    try {
+      await MarketplaceInstance.destroy({from: accounts[1]});
+      assert.fail('Should have reverted before');
+    } catch(error) {
+      assert.equal(error.message, "VM Exception while processing transaction: revert");
+    }
   });
 });
