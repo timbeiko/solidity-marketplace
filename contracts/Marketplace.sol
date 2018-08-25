@@ -48,7 +48,10 @@ contract Marketplace is Ownable, Destructible, Pausable {
 			emit AdminRemoved(admin);
 	}
 
-	function checkAdmin(address admin) constant public returns (bool) {
+	function checkAdmin(address admin) 
+	constant 
+	public 
+	returns (bool) {
 		return administrators[admin];
 	}
 
@@ -60,11 +63,17 @@ contract Marketplace is Ownable, Destructible, Pausable {
 			emit StoreOwnerRequest(msg.sender);
 	}
 
-	function getRequestedStoreOwnersLength() constant public returns (uint) {
+	function getRequestedStoreOwnersLength() 
+	constant 
+	public 
+	returns (uint) {
 		return requestedStoreOwners.length;
 	}
 
-	function getRequestedStoreOwner(uint id) constant public returns (address) {
+	function getRequestedStoreOwner(uint id) 
+	constant 
+	public 
+	returns (address) {
 		return requestedStoreOwners[id];
 	} 
 
@@ -84,7 +93,10 @@ contract Marketplace is Ownable, Destructible, Pausable {
 		emit StoreOwnerRemoved(storeOwner);
 	}
  
-	function checkStoreOwnerStatus(address storeOwner) constant public returns (bool) {
+	function checkStoreOwnerStatus(address storeOwner) 
+	constant 
+	public 
+	returns (bool) {
 		return storeOwners[storeOwner];
 	}
 }
