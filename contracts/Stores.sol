@@ -99,6 +99,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	function createStorefront(string name) 
 	onlyStoreOwner 
+	whenNotPaused
 	public 
 	returns (bytes32) {
 		bytes32 id = keccak256(abi.encodePacked(msg.sender, name, now));
@@ -112,6 +113,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	function removeStorefront(bytes32 id) 
 	onlyStorefrontOwner(id) 
+	whenNotPaused
 	public {
 		Storefront memory sf = storefrontById[id]; 
 		bytes32 [] storage inventory = inventories[id]; 
@@ -156,6 +158,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	function withdrawStorefrontBalance(bytes32 storefrontId) 
 	onlyStorefrontOwner(storefrontId)
+	whenNotPaused
 	public {
 		uint storefrontBalance = storefrontById[storefrontId].balance;
 		if (storefrontBalance > 0) {
@@ -217,6 +220,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	function addProduct(bytes32 storefrontId, string name, string description, uint price, uint qty) 
 	public 
 	onlyStorefrontOwner(storefrontId) 
+	whenNotPaused
 	returns (bytes32) {
 		bytes32 productId = keccak256(abi.encodePacked(msg.sender, storefrontId, name, description, price, qty)); 
 		Product memory p = Product(productId, name, description, price, qty, storefrontId); 
@@ -228,6 +232,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	function updateProductPrice(bytes32 storefrontId, bytes32 productId, uint newPrice) 
 	onlyStorefrontOwner(storefrontId) 
+	whenNotPaused
 	public {
 		Product product = productById[productId];
 		uint oldPrice = product.price;
@@ -263,6 +268,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	function removeProduct(bytes32 storefrontId, bytes32 productId) 
 	onlyStorefrontOwner(storefrontId) 
+	whenNotPaused
 	public {
 		bytes32[] inventory = inventories[storefrontId]; 
 		uint productCount = inventory.length; 
@@ -294,6 +300,7 @@ contract Stores is Ownable, Destructible, Pausable {
 
 	function purchaseProduct(bytes32 storefrontId, bytes32 productId, uint qty) 
 	payable 
+	whenNotPaused
 	returns (bool) {
 		// Fetch product from inventory and perform checks 
 		Product product = productById[productId];
