@@ -1,5 +1,6 @@
 var Marketplace = artifacts.require("./Marketplace.sol");
 var Stores = artifacts.require("./Stores.sol");
+var Pausable = artifacts.require("./Pausable.sol");
 
 const promisify = (inner) =>
   new Promise((resolve, reject) =>
@@ -352,6 +353,44 @@ contract('Stores', async (accounts) => {
 		assert.equal(balance.toNumber(), 0);
 		contractBalance = await stores.getBalance();
 		assert.equal(contractBalance, 0);
+	});
+
+	it("Should allow owners to pause the contract", async () => {
+    let marketplace = await Marketplace.new();
+    let stores = await Stores.new(marketplace.address);
+    await stores.pause({from: accounts[0]})
+	  let PausableInstance = await Pausable.deployed();
+	  assert(PausableInstance.paused, true);
+	}); 
+
+	it("Should not allow calling whenNotPaused functions if contract is paused", async () => {
+    let marketplace = await Marketplace.new();
+    let stores = await Stores.new(marketplace.address);
+    let storeOwner = accounts[1];
+    await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+    await stores.pause({from: accounts[0]})
+      try {
+        await stores.createStorefront("Storefront which should not be created", {from: storeOwner});
+        assert.fail('Should have reverted before');
+      } catch(error) {
+        assert.equal(error.message, "VM Exception while processing transaction: revert");
+      }
+	});
+
+	it("Should allow owners to unpause the contract", async () => {
+    let marketplace = await Marketplace.new();
+    let stores = await Stores.new(marketplace.address);
+    let storeOwner = accounts[1];
+    await marketplace.approveStoreOwnerStatus(storeOwner, {from: accounts[0]});
+    await stores.pause({from: accounts[0]})
+    await stores.unpause({from: accounts[0]})
+    await stores.createStorefront("Storefront which should not be created", {from: storeOwner});
+
+    let PausableInstance = await Pausable.deployed();
+    assert(PausableInstance.paused, false);
+
+    let storeCount = await stores.getTotalStorefrontsCount();
+    assert(storeCount, 1);
 	});
 });
 

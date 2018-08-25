@@ -127,6 +127,10 @@ contract('Marketplace', function(accounts) {
     await MarketplaceInstance.pause({from: accounts[0]})
     await MarketplaceInstance.unpause({from: accounts[0]})
     await MarketplaceInstance.addAdmin(accounts[1], {from: accounts[0]});
+
+    let PausableInstance = await Pausable.deployed();
+    assert(PausableInstance.paused, false);
+
     assert(marketplaceInstance.checkAdmin(accounts[1]), true);
   });
 });

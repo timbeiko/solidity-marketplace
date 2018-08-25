@@ -70,7 +70,9 @@ To see how to test the project for the required functionality, see `user_stories
 	- Yes. See `Testing` under `Running the Project`
  
 ## [TODO] Design Pattern Requirements:
-- [ ] Implement emergency stop
+- [x] Implement emergency stop
+	- Both `Stores.sol` and `Marketplace.sol` implement the `Pausable` library from Zeppelin. 
+	- Functionality is tested at the end of `marketplace.js` and `stores.js`
 - [ ] What other design patterns have you used / not used?
 	- See `design_pattern_desicions.md`
  
