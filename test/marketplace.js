@@ -1,4 +1,6 @@
 var Marketplace = artifacts.require("./Marketplace.sol");
+var Pausable = artifacts.require("./Pausable.sol");
+
 
 contract('Marketplace', function(accounts) {
 
@@ -100,5 +102,33 @@ contract('Marketplace', function(accounts) {
       marketplaceInstance.removeStoreOwnerStatus(accounts[1], {from: nonAdmin});
       assert(marketplaceInstance.checkStoreOwnerStatus(accounts[1]), true);
     });
+  });
+
+  it("Should allow owners to pause the contract", async () => {
+    let MarketplaceInstance = await Marketplace.deployed();
+    await MarketplaceInstance.pause({from: accounts[0]})
+    let PausableInstance = await Pausable.deployed();
+    assert(PausableInstance.paused, true);
+  }); 
+
+  it("Should not allow calling whenNotPaused functions if contract is paused", async () => {
+    let MarketplaceInstance = await Marketplace.deployed();
+    // Line commented because contract gets paused in test above ("Should allow owners to pause the contract")
+    // await MarketplaceInstance.pause({from: accounts[0]})
+      try {
+        await MarketplaceInstance.addAdmin(accounts[1], {from: accounts[0]});
+        assert.fail('Should have reverted before');
+      } catch(error) {
+        assert.equal(error.message, "VM Exception while processing transaction: revert");
+      }
+  });
+
+  it("Should allow owners to unpause the contract", async () => {
+    let MarketplaceInstance = await Marketplace.deployed();
+    // Line commented because contract gets paused in ("Should allow owners to pause the contract")
+    // await MarketplaceInstance.pause({from: accounts[0]})
+    await MarketplaceInstance.unpause({from: accounts[0]})
+    await MarketplaceInstance.addAdmin(accounts[1], {from: accounts[0]});
+    assert(marketplaceInstance.checkAdmin(accounts[1]), true);
   });
 });

@@ -2,13 +2,14 @@ pragma solidity ^0.4.2;
 
 import "../installed_contracts/zeppelin/contracts/ownership/Ownable.sol";
 import "../installed_contracts/zeppelin/contracts/lifecycle/Destructible.sol";
+import "../installed_contracts/zeppelin/contracts/lifecycle/Pausable.sol";
 
 /*
 * Marketplace 
 *
 * This is the main contract for the Marketplace implementation.
 */
-contract Marketplace is Ownable, Destructible {
+contract Marketplace is Ownable, Destructible, Pausable {
 	constructor() public {
 		administrators[msg.sender] = true;
 	}
@@ -29,13 +30,19 @@ contract Marketplace is Ownable, Destructible {
 	}
 
 	// This function should maybe be set to onlyOwner as well... 
-	function addAdmin(address admin) onlyAdmin public {
+	function addAdmin(address admin) 
+	onlyAdmin 
+	whenNotPaused
+	public {
 		administrators[admin] = true;
 		emit AdminAdded(admin);
 	}
 
 	// There should maybe be an "owner UI", but perhaps that's overkill...
-	function removeAdmin(address admin) onlyOwner public {
+	function removeAdmin(address admin) 
+	onlyOwner
+	whenNotPaused
+	public {
 		if (administrators[admin] == true)
 			administrators[admin] = false;
 			emit AdminRemoved(admin);
@@ -45,7 +52,9 @@ contract Marketplace is Ownable, Destructible {
 		return administrators[admin];
 	}
 
-	function requestStoreOwnerStatus() public {
+	function requestStoreOwnerStatus() 
+	whenNotPaused
+	public {
 		if (storeOwners[msg.sender] == false)
 			requestedStoreOwners.push(msg.sender);
 			emit StoreOwnerRequest(msg.sender);
@@ -59,12 +68,18 @@ contract Marketplace is Ownable, Destructible {
 		return requestedStoreOwners[id];
 	} 
 
-	function approveStoreOwnerStatus(address requester) onlyAdmin public {
+	function approveStoreOwnerStatus(address requester) 
+	onlyAdmin 
+	whenNotPaused
+	public {
 		storeOwners[requester] = true; 
 		emit StoreOwnerAdded(requester);
 	}
 
-	function removeStoreOwnerStatus(address storeOwner) onlyAdmin public {
+	function removeStoreOwnerStatus(address storeOwner) 
+	onlyAdmin 
+	whenNotPaused
+	public {
 		storeOwners[storeOwner] = false; 
 		emit StoreOwnerRemoved(storeOwner);
 	}
