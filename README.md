@@ -64,7 +64,7 @@ To see how to test the project for the required functionality, see `user_stories
 		- See `/test/TestMarketplace.sol` and `/test/TestStores.sol`
 	- [x] JavaScript
 		- See `/test/marketplace.js` and `/test/stores.js`
-- [ ] [TODO] Explain why you wrote those tests
+- [x] Explain why you wrote those tests
 	- See `testing_rationale.md`
 - [x] Tests run with truffle test
 	- Yes. See `Testing` under `Running the Project`
@@ -97,4 +97,8 @@ To see how to test the project for the required functionality, see `user_stories
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
 
+*** 
+
+# TODO 
+- [ ] Display Address in navbar 
 
