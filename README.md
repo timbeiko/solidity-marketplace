@@ -92,12 +92,3 @@ To see how to test the project for the required functionality, see `user_stories
 ## Full Requirements Document 
 
 Additional information about the project can be found [here](https://docs.google.com/document/d/12dsvTYtXdjecSX089rx9jO71_CTVfsseVu3ZUumHX2E/edit).
-
-
-***
-
-# TODOs
-- [ ] Implement "They can add/remove products to the storefront or change any of the products’ prices."
-	- [ ] Deal with deletion of things better (maybe just add boolean attributes?) 
-		- Probably best to just do "dumb deletes", a.k.a. set things to 0x0, and eventually add "smart adds / deletes"
-

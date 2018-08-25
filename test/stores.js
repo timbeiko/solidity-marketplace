@@ -210,7 +210,16 @@ contract('Stores', async (accounts) => {
 		await stores.removeProduct(storefrontId, productId, {from: storeOwner}); 
 		await stores.getProductCount(storefrontId);
 		productCount = await stores.getProductCount.call(storefrontId);
-		assert.equal(productCount.toNumber(), 0);
+
+		// Do not count products with id=0x0
+		let finalCount = Number(productCount);
+		for(let i=0; i<productCount; i++) {
+			let id = await stores.getProductId(storefrontId, i);
+			if (id == 0x0000000000000000000000000000000000000000000000000000000000000000)
+				finalCount -= 1;
+		}
+
+		assert.equal(finalCount, 0);
 	});
 
 	it("Should allow someone to purchase a product if they pay >= its price", async() => {

@@ -44,7 +44,7 @@
               <input id="productPrice" type="number" min="0" step="any"> </br> </br>
               Quantity: 
               <input id="productQty" type="number" min="0"> </br></br>
-              <input class="btn btn-default btn-create-storefront" type="submit" value="Add Product To Store">
+              <input class="btn btn-success btn-create-storefront" type="submit" value="Add Product">
             </form>
         </div>
       </div> <!-- end of storeOwnerView -->
@@ -83,6 +83,12 @@
                     <input id="productPrice" type="number" name="price" min="0" step="any">
                     <input type="hidden" id="productID" name="id" value="0x"> <br><br>
                     <input class="btn btn-default" type="submit" value="Update">
+                  </form>
+
+                  <form class="removeProduct" style="display: none;">
+                    <h5>Remove Product</h5> 
+                    <input type="hidden" id="productID" name="id" value="0x"> 
+                    <input class="btn btn-danger" type="submit" value="Remove">
                   </form>
 
               </div>

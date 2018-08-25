@@ -58,10 +58,11 @@ They can add/remove products to the storefront or change any of the products’ 
 #### Adding a Product
 As a `storeowner`, click on any created storefront from the homepage. On the storefront page, (`http://localhost:3000/id={storefrontId}`), fill in the information in the `Add a Product` section, and click the button. After the transaction is confirmed, refresh the page and the product should appear in the `Products For Sale` section.  
 
-#### [TODO] Remove a Product
-
 #### Change A Product's Price 
 As a `storeowner`, click on any created storefront from the homepage. On the storefront page, (`http://localhost:3000/id={storefrontId}`), after having added a product, in the `Products For Sale` section, you will be able to change a product's price by updating the value and submitting the `Update Product Price` form.
+
+#### Removing a Product
+As a `storeowner`, click on any created storefront from the homepage. On the storefront page, (`http://localhost:3000/id={storefrontId}`), after having added a product, in the `Products For Sale` section, you will be able to remove a product by clicking on the "Remove" button. Once the transaction is confirmed, refresh the page to see that the product is not displayed anymore. 
 
 ### Story 
 They can  withdraw any funds that the store has collected from sales.

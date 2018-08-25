@@ -1,3 +1,4 @@
+// Helper methods to get account balances
 const promisify = (inner) =>
   new Promise((resolve, reject) =>
     inner((err, res) => {
@@ -84,7 +85,6 @@ App = {
     $('#storeOwnerView').attr('style', '');
     $('#defaultView').attr('style', 'display: none;');
     App.addProduct();
-    // App.deleteStorefront(); // Need to convert to delete product
     App.productListView();
   },
 
@@ -97,7 +97,6 @@ App = {
       let desc = $("input#productDesc").val();
       let price = $("input#productPrice").val();
       let qty = $("input#productQty").val();
-
 
       web3.eth.getAccounts(function(error, accounts) {
         if (error) {
@@ -122,6 +121,7 @@ App = {
     var productsDiv = $('#products');
     var productTemplate = $('#productTemplate'); 
     var productUpdateForm = $('.updateProduct');
+    var productRemoveForm = $('.removeProduct');
     var productPurchaseForm = $('#buyProduct');
 
     let accounts = web3.eth.accounts;
@@ -147,9 +147,15 @@ App = {
 
       // Different buttons for storeowners vs. purchasers 
       if (storefrontOwnerAddress === account) {
+        // Updating Price 
         productUpdateForm.attr('style', '');
         productUpdateForm.find('#productID').attr("value", productIDs[i]);
+
+        // Removing Products 
+        productRemoveForm.attr('style', '');
+        productRemoveForm.find('#productID').attr("value", productIDs[i]);
       } else {
+        // Purchasing Products 
         productPurchaseForm.attr('style', '');
         productPurchaseForm.find('#purchaseQty').attr("max", Number(product[3]));
         productPurchaseForm.find('#productID').attr("value", productIDs[i]);
@@ -157,9 +163,9 @@ App = {
       }
       productsDiv.append(productTemplate.html());
     }
-
-    App.updateProductPrice();
     App.purchaseProduct();
+    App.updateProductPrice();
+    App.removeProduct();
   },
 
   purchaseProduct: function() {
@@ -209,13 +215,31 @@ App = {
     });
   },
 
+  removeProduct: function() {
+    $('.removeProduct').submit(function( event ) {
+      let id = $(this).closest("form").find("input[name='id']").val();
+      web3.eth.getAccounts(function(error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+        var account = accounts[0];
+        App.contracts.Stores.deployed().then(function(instance) {
+          StoresInstance = instance;
+          return StoresInstance.removeProduct(App.storefrontID, id, {from: account});
+        });
+      });
+      event.preventDefault();
+    });
+  },
+
   getProducts: async function(length, account) {
     let productIDs = [];
     let StoresInstance = await App.contracts.Stores.deployed();
 
     for(i=0; i<length; i++) {
       let sf = await StoresInstance.getProductId(App.storefrontID, i);
-      productIDs.push(sf);
+      if (sf != 0x0000000000000000000000000000000000000000000000000000000000000000)
+        productIDs.push(sf);
     }
 
     // Remove duplicates

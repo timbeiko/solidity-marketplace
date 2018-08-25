@@ -281,12 +281,7 @@ contract Stores is Ownable, Destructible {
 	constant 
 	public 
 	returns (uint) {
-		uint count = inventories[storefrontId].length;
-		for(uint i=0; i<count; i++) {
-			if (inventories[storefrontId][i] == 0x0000000000000000000000000000000000000000000000000000000000000000)
-				count -= 1;
-		}
-		return count;
+		return inventories[storefrontId].length;
 	}
 
 	function getProductId(bytes32 storefrontId, uint productIndex) 

@@ -385,7 +385,6 @@ App = {
           return StoresInstance.withdrawStorefrontBalance(id, {from: account});
         });
       });
-      window.location.reload();
       event.preventDefault();
     });
   }
