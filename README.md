@@ -69,11 +69,11 @@ To see how to test the project for the required functionality, see `user_stories
 - [x] Tests run with truffle test
 	- Yes. See `Testing` under `Running the Project`
  
-## [TODO] Design Pattern Requirements:
+## Design Pattern Requirements:
 - [x] Implement emergency stop
 	- Both `Stores.sol` and `Marketplace.sol` implement the `Pausable` library from Zeppelin. 
 	- Functionality is tested at the end of `marketplace.js` and `stores.js`
-- [ ] What other design patterns have you used / not used?
+- [x] What other design patterns have you used / not used?
 	- See `design_pattern_desicions.md`
  
 ## [TODO] Security Tools / Common Attacks (in avoiding_common_attacks.md):
