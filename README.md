@@ -30,11 +30,12 @@ After this, you should be able to use MetaMask to interact with the application.
 
 ## Testing 
 
-To run the tests, open two terminal windows from the top-level directory of the project. In the first, run `ganache-cli` to start your local blockchain, and in the second, run `truffle test` to run all the tests.
+To run the tests, from the main directory of the project, run `truffle develop`. Then, from the console, run `test`. 
+You can also run these tests against a Ganache blockchain by opening a first terminal window and running `ganache-cli` and then, from a second terminal window, `truffle test`. Both commands have to be run from the top level directory for this project. 
 
 All tests should pass, but tests that involve buying products sometimes fail because of rounding errors. If this is the case, you should see an error such as `AssertionError: expected 89987387000000000000 to equal 89987386999999990000`. You can typically get the tests to pass by simply re-running them. The rounding errors tend to happen if you run the tests over and over on the same blockchain with the same accounts (i.e. without restarting `ganache-cli`). Simply restarting the local blockchain can sometimes make everything pass. 
 
-Each of the two contracts has `.sol` and `.js` tests, all located under `/test`. For more explanations around  tests, see `testing_rationale.md`. 
+Each of the two contracts has `.sol` and `.js` tests, all located under `/test`. For more explanations on tests, see `testing_rationale.md`. 
 
 ## Project Requirements 
 
@@ -87,7 +88,8 @@ To see how to test the project for the required functionality, see `user_stories
 	- See `Marketplace.sol` and `Stores.sol` 
 
 ## [TODO] Stretch Requirement
-- [ ] Deploy on a test net 
+- [x] Deploy on a test net 
+	- See `deployed_addresses.txt`
 - [ ] Integrate with an additional service, for example:
 	- [ ] IPFS
 	- [ ] uPort

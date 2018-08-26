@@ -1,0 +1,10 @@
+Contracts deployed on Rinkeby testnet from address 0x7d182a2cf4706f9094fba6094d2d2733bd682bc0
+See: https://rinkeby.etherscan.io/address/0x7d182a2cf4706f9094fba6094d2d2733bd682bc0
+
+Deployed contracts and their addresses: 
+  Migrations: 0x7a8d459446298e71b349c71ed2a35569b3e10e2b
+  Ownable: 0x26df881ee14f3e182a53d5b0013103c45abee334
+  Pausable: 0xb5c4604f5fdf06f0ca239767822453a78c4c8346
+  Destructible: 0x91546f99cfe12fe9bad28b4d921869ecbbbf7c86
+  Marketplace: 0xbdc9a9bf0bc5903304e1b53937a4b2a391284e70
+  Stores: 0x92c4868b5211447fe79733b65e7455a4fca8d65e

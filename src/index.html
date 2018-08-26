@@ -19,7 +19,7 @@
   </head>
   <body>
     <nav class="navbar navbar-default">
-      <h4 class="navbar-text">Current Address: <span id="currentAddress">0x0</span></h4>
+      <h4 class="navbar-text">Current Account: <span id="currentAddress">0x0</span></h4>
 
       <button class="btn navbar-btn btn-primary btn-request-store" type="button" data-addr="0x0" style="display: none;"> <b> Request to be a store owner </b></button>
     </nav>
@@ -43,7 +43,7 @@
             <div id="requesterTemplate" style="display: none;">
               <p>
                 <span class="requesterAddress"> 0x0 </span>
-                <button class="btn btn-default btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
+                <button class="btn btn-success btn-approve-requester" type="button" data-addr="0x0"> Approve </button>
               </p>
             </div>
 
@@ -53,7 +53,7 @@
               <p>
                 <form id="removeStoreOwner">
                   <input id="removeAddr" type="text">
-                  <input class="btn btn-default btn-remove-owner" type="submit" value="Remove">
+                  <input class="btn btn-danger btn-remove-owner" type="submit" value="Remove">
                 </form>
               </p>
             </div>
@@ -63,7 +63,7 @@
                 <p>Enter the address below</p>
                 <form id="addAdmin">
                   <input id="adminAddrAdd" type="text">
-                  <input class="btn btn-default btn-add-admin" type="submit" value="Add">
+                  <input class="btn btn-success btn-add-admin" type="submit" value="Add">
                 </form>    
             </div>
 
@@ -72,7 +72,7 @@
               <p>Enter the address below</p>
                 <form id="removeAdmin">
                   <input id="adminAddrRem" type="text">
-                  <input class="btn btn-default btn-remove-admin" type="submit" value="Remove">
+                  <input class="btn btn-danger btn-remove-admin" type="submit" value="Remove">
                 </form>    
             </div>
           </div>
