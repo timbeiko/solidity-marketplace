@@ -22,12 +22,10 @@ module.exports = {
     }, 
     rinkeby: {
       provider: function() {
-        // let hd = new HDWalletProvider(secret, "https://rinkeby.infura.io/v3/926fa142e0e84a0ba59c2cad193fd08b");
-        // console.log(secret.mnemonic());
         return new HDWalletProvider(secret.mnemonic(), "https://rinkeby.infura.io/v3/926fa142e0e84a0ba59c2cad193fd08b")
       },
-      network_id: 3,
-      gas: 4017891,
+      network_id: 4,
+      gas: 6017891,
     },   
   },
  compilers: {
