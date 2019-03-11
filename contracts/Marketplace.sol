@@ -67,7 +67,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	* @return True if address is admin. False otherwise. 
 	*/ 
 	function checkAdmin(address admin) 
-	constant 
+	view 
 	public 
 	returns (bool) {
 		return administrators[admin];
@@ -89,7 +89,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	* @return Length of the requestedStoreOwners
 	*/ 
 	function getRequestedStoreOwnersLength() 
-	constant 
+	view 
 	public 
 	returns (uint) {
 		return requestedStoreOwners.length;
@@ -101,7 +101,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	* @return Address at position index in requestedStoreOwners
 	*/ 
 	function getRequestedStoreOwner(uint index) 
-	constant 
+	view 
 	public 
 	returns (address) {
 		return requestedStoreOwners[index];
@@ -134,7 +134,7 @@ contract Marketplace is Ownable, Destructible, Pausable {
 	* @return True if the address is a storeowner. False otherwise.
 	*/ 	
 	function checkStoreOwnerStatus(address storeOwner) 
-	constant 
+	view 
 	public 
 	returns (bool) {
 		return storeOwners[storeOwner];

@@ -30,6 +30,11 @@ module.exports = {
       gas: 4017891,
     },   
   },
+ compilers: {
+  solc: {
+    version: "0.4.24",  
+    }
+  },
   solc: {
     optimizer: {
       enabled: true,

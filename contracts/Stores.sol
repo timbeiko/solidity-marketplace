@@ -122,7 +122,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return Balance held by the contract
 	*/
 	function getBalance() 
-	constant
+	view
 	public 
 	returns (uint) {
 		return address(this).balance;
@@ -132,7 +132,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return The number of storefronts that were created. 
 	*/
 	function getTotalStorefrontsCount() 
-	constant 
+	view 
 	public 
 	returns (uint) {
 		return storefronts.length;
@@ -227,7 +227,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return The number of storefronts associated to this address (including removed ones) 
 	*/ 
 	function getStorefrontCount(address owner) 
-	constant 
+	view 
 	public 
 	returns (uint) {
 		return storefrontsByOwner[owner].length;
@@ -238,7 +238,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return storefrontId ID of storefront at specified index 
 	*/
 	function getStorefrontId(uint storefrontIndex) 
-	constant 
+	view 
 	public
 	returns (bytes32) {
 		return storefronts[storefrontIndex];
@@ -249,7 +249,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return address Address of the owner of the storefront  
 	*/
 	function getStorefrontOwner(bytes32 storefrontId) 
-	constant 
+	view 
 	public 
 	returns (address) {
 		return storefrontById[storefrontId].owner;
@@ -261,7 +261,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return storefrontId ID of storefront at specified index in owner's storefronts
 	*/
 	function getStorefrontsId(address owner, uint storefrontIndex) 
-	constant 
+	view 
 	public 
 	returns (bytes32) {
 		return storefrontsByOwner[owner][storefrontIndex];
@@ -272,7 +272,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return Name of the storefront 
 	*/
 	function getStorefrontName(bytes32 storefrontId) 
-	constant 
+	view 
 	public 
 	returns (string) {
 		return storefrontById[storefrontId].name;
@@ -283,7 +283,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return Storefront's balance 
 	*/
 	function getStorefrontBalance(bytes32 storefrontId) 
-	constant 
+	view 
 	public 
 	returns (uint) {
 		return storefrontById[storefrontId].balance;
@@ -330,7 +330,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return Price of the product 
 	*/
 	function getProductPrice(bytes32 productId) 
-	constant 
+	view 
 	public 
 	returns (uint) {
 		return productById[productId].price;
@@ -341,7 +341,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return Name of the product 
 	*/
 	function getProductName(bytes32 productId) 
-	constant 
+	view 
 	public 
 	returns (string) {
 		return productById[productId].name;
@@ -356,7 +356,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return storefrontId ID of storefront associated with Product 
 	*/
 	function getProduct(bytes32 productId)
-	constant 
+	view 
 	public
 	returns (string, string, uint, uint, bytes32) {
 		return (productById[productId].name,
@@ -393,7 +393,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return The number of products associated to this storefront (including removed ones) 
 	*/ 
 	function getProductCount(bytes32 storefrontId) 
-	constant 
+	view 
 	public 
 	returns (uint) {
 		return inventories[storefrontId].length;
@@ -405,7 +405,7 @@ contract Stores is Ownable, Destructible, Pausable {
 	* @return productId ID of product at specified index in storefront's products
 	*/
 	function getProductId(bytes32 storefrontId, uint productIndex) 
-	constant
+	view
 	public 
 	returns (bytes32) {
 		return bytes32(inventories[storefrontId][productIndex]); 
