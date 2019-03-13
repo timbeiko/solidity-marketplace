@@ -1,5 +1,4 @@
 # Design Pattern Decisions
-See: https://courses.consensys.net/courses/course-v1:ConsenSysAcademy+2018DP+1/courseware/6ad0b7c56c8947a2b101cb916896fb9f/edd7e596883247cbb04e5145b3508467/?activate_block_id=block-v1%3AConsenSysAcademy%2B2018DP%2B1%2Btype%40sequential%2Bblock%40edd7e596883247cbb04e5145b3508467
 
 ## Circuit Breaker
 Zeppelin's `Pausable` library is extended to both the `Marketplace.sol` and `Stores.sol` contracts. 
@@ -49,4 +48,3 @@ Not used, but could be interesting to use if states were added to the products (
 
 ## Speed Bump
 Not used. Could be interesting to use it in conjunction with the `Pausable` functionality. For example, if we had a `SlowWithdraw` function that allowed `storeOwners` to withdraw their storefront balances N blocks after the contract had been paused. 
-
